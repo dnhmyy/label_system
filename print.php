@@ -15,11 +15,13 @@ $prod_date = $_POST['prod_date'] ?? '';
 $bb_date = $_POST['bb_date'] ?? '';
 $qty = (int)($_POST['qty'] ?? 1);
 
-// Format tanggal agar lebih mudah dibaca (opsional, sesuaikan kebutuhan)
-// Default format HTML input date adalah YYYY-MM-DD
-// Kita bisa ubah jadi DD/MM/YYYY atau biarkan saja
-$prod_date_formatted = date('d/m/Y', strtotime($prod_date));
-$bb_date_formatted = date('d/m/Y', strtotime($bb_date));
+// Format tanggal agar lebih mudah dibaca
+// Sekarang input dari form menggunakan format d/m/Y
+$prod_dt = DateTime::createFromFormat('d/m/Y', $prod_date);
+$bb_dt = DateTime::createFromFormat('d/m/Y', $bb_date);
+
+$prod_date_formatted = $prod_dt ? $prod_dt->format('d/m/Y') : $prod_date;
+$bb_date_formatted = $bb_dt ? $bb_dt->format('d/m/Y') : $bb_date;
 
 // 2. Setup mPDF
 // Ukuran kertas custom: 40mm x 30mm
