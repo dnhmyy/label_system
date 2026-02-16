@@ -194,12 +194,12 @@
 
         <div class="form-group">
             <label for="prod_date">Tanggal Produksi (P)</label>
-            <input type="text" id="prod_date" name="prod_date" placeholder="DD/MM/YYYY" required autocomplete="off">
+            <input type="date" id="prod_date" name="prod_date" required>
         </div>
 
         <div class="form-group">
             <label for="bb_date">Tanggal Best Before (BB)</label>
-            <input type="text" id="bb_date" name="bb_date" placeholder="DD/MM/YYYY" required autocomplete="off">
+            <input type="date" id="bb_date" name="bb_date" required>
         </div>
 
         <div class="form-group">
@@ -216,15 +216,10 @@
 </div>
 
 <script>
-    // Set default date to today in DD/MM/YYYY format
+    // Set default date to today in YYYY-MM-DD format (Standard for <input type="date">)
     document.addEventListener('DOMContentLoaded', (event) => {
-        const now = new Date();
-        const day = String(now.getDate()).padStart(2, '0');
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const year = now.getFullYear();
-        const todayFormatted = `${day}/${month}/${year}`;
-        
-        document.getElementById('prod_date').value = todayFormatted;
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('prod_date').value = today;
     });
 </script>
 
