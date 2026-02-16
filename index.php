@@ -144,8 +144,8 @@
                 <optgroup label="FN Series">
                     <option value="FN - WC">FN - WC</option>
                     <option value="FN - WS">FN - WS</option>
-                    <option value="FN - WS">FN - RISOL MAYO</option>
-                    <option value="FN - WS">FN - RISOL MAKARONI</option>
+                    <option value="FN - RISOL MAYO">FN - RISOL MAYO</option>
+                    <option value="FN - RISOL MAKARONI">FN - RISOL MAKARONI</option>
                 </optgroup>
 
                 <optgroup label="IN Series">
@@ -176,10 +176,10 @@
                     <option value="IN - MA">IN - MA</option>
                     <option value="IN - MP">IN - MP</option>
                     <option value="IN - SB">IN - SB</option>
-                    <option value="IN - SB">IN - CKK</option>
-                    <option value="IN - SB">IN - TR</option>
-                    <option value="IN - SB">IN - CF</option>
-                    <option value="IN - SB">IN - CCB</option>
+                    <option value="IN - CKK">IN - CKK</option>
+                    <option value="IN - TR">IN - TR</option>
+                    <option value="IN - CF">IN - CF</option>
+                    <option value="IN - CCB">IN - CCB</option>
                 </optgroup>
 
                 <optgroup label="TPG Series">
