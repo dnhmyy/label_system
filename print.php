@@ -86,7 +86,7 @@ $html_content = "
 
     /* Baris 3: Tanggal */
     .td-date {
-        height: 16mm; /* Tinggi tetap untuk area tanggal */
+        height: 14mm; /* Tinggi tetap untuk area tanggal */
         vertical-align: middle; 
         padding-top: 2mm;
     }
