@@ -77,7 +77,7 @@ $html_content = "
     
     /* Baris 1: Produk */
     .td-product {
-        height: 8mm; /* Tinggi ditambah agar bisa menampung <br> */
+        height: 12mm; /* Tinggi ditambah agar bisa menampung <br> */
         vertical-align: bottom;
         padding-bottom: 1mm;
     }
