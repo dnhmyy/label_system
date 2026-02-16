@@ -145,7 +145,7 @@
                     <option value="FN - WC">FN - WC</option>
                     <option value="FN - WS">FN - WS</option>
                     <option value="FN - RISOL MAYO">FN - RISOL MAYO</option>
-                    <option value="FN - RISOL MAKARONI">FN - RISOL MAKARONI</option>
+                    <option value="FN - MAKARONI">FN - MAKARONI</option>
                 </optgroup>
 
                 <optgroup label="IN Series">
