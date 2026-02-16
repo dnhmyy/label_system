@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  label-system:
+    build: .
+    container_name: label-system
+    ports:
+      - "8081:80" # AMAN! Artinya: Port 8081 (Laptop) -> Port 80 (Container). Tidak bentrok dengan Nginx HRIS (Port 80 Laptop).
+    volumes:
+      - .:/var/www/html # Syncs local files for development
+    restart: unless-stopped
