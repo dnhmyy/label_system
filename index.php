@@ -122,6 +122,7 @@
                 <option value="" disabled selected>Pilih Produk...</option>
                 
                 <optgroup label="PX Series">
+                    <option value="PX - MS">PX - MS</option>
                     <option value="PX - TA">PX - TA</option>
                     <option value="PX - TB">PX - TB</option>
                     <option value="PX - TG">PX - TG</option>
