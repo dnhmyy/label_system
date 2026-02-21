@@ -120,6 +120,19 @@
             <label for="fn">Nama Produk</label>
             <select id="fn" name="fn" required>
                 <option value="" disabled selected>Pilih Produk...</option>
+                
+                <optgroup label="PX Series">
+                    <option value="PX - TA">PX - TA</option>
+                    <option value="PX - TB">PX - TB</option>
+                    <option value="PX - TG">PX - TG</option>
+                    <option value="PX - PA">PX - PA</option>
+                    <option value="PX - WC">PX - WC</option>
+                    <option value="PX - WS">PX - WS</option>
+                    <option value="PX - SL">PX - SL</option>
+                    <option value="PX - PN">PX - PN</option>
+                    <option value="PX - CC">PX - CC</option>
+                    <option value="PX - MS">PX - MS</option>
+                </optgroup>
 
                 <optgroup label="CAKE Series">
                     <option value="LAPIS SURABAYA">LAPIS SURABAYA</option>
@@ -127,18 +140,6 @@
                     <option value="BOLU PISANG">BOLU PISANG</option>
                 </optgroup>
             
-               <optgroup label="PX Series">
-                    <option value="PX - TA">PX - TA</option>
-                    <option value="PX - TB">PX - TB</option>
-                    <option value="PX - TG">PX - TG</option>
-                    <option value="PX - PA">PX - PA</option>
-                    <option value="PX - WC">PX - WC</option>
-                    <option va lue="PX - WS">PX - WS</option>
-                    <option value="PX - SL">PX - SL</option>
-                    <option value="PX - PN">PX - PN</option>
-                    <option value="PX - CC">PX - CC</option>
-                </optgroup>
-
                 <optgroup label="S Series">
                     <option value="S - TA">S - TA</option>
                     <option value="S - TB">S - TB</option>
