@@ -1,31 +1,35 @@
+# Stage 1: Dependencies
+FROM composer:latest AS composer
+
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-progress
+
+# Stage 2: Production
 FROM php:8.2-apache
 
-# Install dependencies needed for GD and Composer
-RUN apt-get update && apt-get install -y \
+# Install dependencies and clean up in one layer to save space
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
     zip \
     unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd
+    && docker-php-ext-install -j$(nproc) gd \
+    && a2enmod rewrite \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && rm -rf /var/lib/apt/lists/*
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
-
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Set working directory
 WORKDIR /var/www/html
 
-# Copy application files
+# Copy app files (respecting .dockerignore)
 COPY . .
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Copy dependencies from stage 1
+COPY --from=composer /app/vendor ./vendor
 
-# Set permissions for Apache
+# Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
