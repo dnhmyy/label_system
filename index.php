@@ -121,6 +121,12 @@
             <select id="fn" name="fn" required>
                 <option value="" disabled selected>Pilih Produk...</option>
 
+                <optgroup label="BR Series">
+                    <option value="BR - REF PER 2KG">BR - REF PER 2KG</option>
+                    <option value="BR - MALINDA PER 1KG">BR - MALINDA PER 1KG</option>
+                </optgroup>
+                    
+
                 <optgroup label="CAKE Series">
                     <option value="LAPIS SURABAYA">LAPIS SURABAYA</option>
                     <option value="LAPIS LEGIT">LAPIS LEGIT</option>
