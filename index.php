@@ -123,7 +123,7 @@
 
                 <optgroup label="BR Series">
                     <option value="BR - REF PER 2KG">BR - REF PER 2KG</option>
-                    <option value="BR - MALINDA PER 1KG">BR - MALINDA PER 2KG</option>
+                    <option value="BR - MALINDA PER 2KG">BR - MALINDA PER 2KG</option>
                 </optgroup>
                     
 
@@ -132,7 +132,7 @@
                     <option value="LAPIS LEGIT">LAPIS LEGIT</option>
                     <option value="BOLU PISANG">BOLU PISANG</option>
                 </optgroup>
-                
+
                 <optgroup label="PX Series">
                     <option value="PX - TA">PX - TA</option>
                     <option value="PX - TB">PX - TB</option>
