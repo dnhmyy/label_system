@@ -5,7 +5,7 @@ services:
     ports:
       - "8081:80"
     volumes:
-      - .:/var/www/html # Syncs local files for development
+      - .:/var/www/html
     restart: unless-stopped
     logging:
       driver: "json-file"

@@ -3,7 +3,7 @@ FROM composer:latest AS composer
 
 WORKDIR /app
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-progress
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-progress --ignore-platform-reqs
 
 # Stage 2: Production
 FROM php:8.2-apache
