@@ -1,7 +1,6 @@
 .git
 .gitignore
 vendor
-composer.lock
 README.md
 Dockerfile
 docker-compose.yml
