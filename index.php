@@ -121,10 +121,6 @@
             <select id="fn" name="fn" required>
                 <option value="" disabled selected>Pilih Produk...</option>
 
-                <optgroup label="BOX Series">
-                    <option value="BOX XL EVENT">BOX XL EVENT</option>
-                </optgroup>
-                    
                 <optgroup label="CAKE Series">
                     <option value="LAPIS SURABAYA">LAPIS SURABAYA</option>
                     <option value="LAPIS LEGIT">LAPIS LEGIT</option>
