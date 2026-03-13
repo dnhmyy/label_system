@@ -1,4 +1,4 @@
-# Roti Kebanggaan - Production Label System
+# Production Label System
 
 Sistem web internal sederhana dan efisien untuk mencetak label produk manufaktur/dapur (ukuran custom **40mm x 30mm**). 
 Dibangun dengan **PHP 8.2**, merender PDF secara dinamis menggunakan library **mPDF**, dan dirancang khusus agar kompatibel dengan printer thermal (misal: Xprinter XP-D4601B).
