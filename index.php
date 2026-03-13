@@ -104,7 +104,8 @@
 
         .form-group {
             margin-bottom: 1.5rem;
-            position: relative; /* For custom dropdown positioning */
+            position: relative;
+            /* For custom dropdown positioning */
         }
 
         /* Custom Searchable Select - Reverted to Solid Standard */
@@ -135,7 +136,8 @@
             background: #fff;
         }
 
-        input:focus, select:focus {
+        input:focus,
+        select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(0, 39, 27, 0.08);
@@ -207,7 +209,8 @@
         }
 
         .td-product {
-            height: 45%; /* Reduced height to move product up */
+            height: 45%;
+            /* Reduced height to move product up */
             vertical-align: bottom;
             text-align: center;
             padding-bottom: 2px;
@@ -262,7 +265,7 @@
     <main class="container">
         <section class="card">
             <div class="header-section">
-                <img src="images/logo.png" alt="Logo" class="logo-img">
+                <img src="images/logo.webp" alt="Logo" class="logo-img">
                 <div class="brand-info">
                     <h1>Roti Kebanggaan</h1>
                     <p>Production Label System</p>
@@ -351,15 +354,15 @@
                     </select>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
                     <div class="form-group">
-                        <label for="prod_date">P (Produksi) <small style="color:var(--text-muted)">DD/MM/YYYY</small></label>
-                        <input type="text" id="prod_date" name="prod_date" placeholder="DD/MM/YYYY" required maxlength="10">
+                        <label for="prod_date">P (Produksi)</label>
+                        <input type="date" id="prod_date" name="prod_date" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="bb_date">BB (Best Before) <small style="color:var(--text-muted)">DD/MM/YYYY</small></label>
-                        <input type="text" id="bb_date" name="bb_date" placeholder="DD/MM/YYYY" required maxlength="10">
+                        <label for="bb_date">BB (Best Before)</label>
+                        <input type="date" id="bb_date" name="bb_date" required>
                     </div>
                 </div>
 
@@ -388,12 +391,12 @@
             <div class="label-mockup">
                 <table class="mockup-table">
                     <tr>
-                        <td class="td-product">
-                            <div class="display-fn" id="live-fn">NAMA PRODUK</div>
+                        <td class="td-product" style="height: 35%;">
+                            <div class="display-fn" id="live-fn" style="font-size: 28px;">NAMA PRODUK</div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="td-dates">
+                        <td class="td-dates" style="height: 65%;">
                             <div class="date-row"><strong>P:</strong> <span id="live-p">00/00/0000</span></div>
                             <div class="date-row"><strong>BB:</strong> <span id="live-bb">00/00/0000</span></div>
                         </td>
@@ -417,42 +420,25 @@
             const liveP = document.getElementById('live-p');
             const liveBB = document.getElementById('live-bb');
 
-            // --- Auto Format DD/MM/YYYY ---
-            function enforceDateFormat(input, onValid) {
-                input.addEventListener('input', (e) => {
-                    let val = e.target.value.replace(/\D/g, '');
-                    if (val.length > 2) val = val.slice(0, 2) + '/' + val.slice(2);
-                    if (val.length > 5) val = val.slice(0, 5) + '/' + val.slice(5, 9);
-                    e.target.value = val;
-                    if(val.length === 10) onValid();
-                    updatePreview();
-                });
-            }
-
             // --- Initial Dates ---
             const today = new Date();
-            const d = String(today.getDate()).padStart(2, '0');
-            const m = String(today.getMonth() + 1).padStart(2, '0');
-            const y = today.getFullYear();
-            prodIn.value = `${d}/${m}/${y}`;
+            prodIn.value = today.toISOString().split('T')[0];
 
-            function updateBB() {
-                const parts = prodIn.value.split('/');
-                if(parts.length === 3 && parts[2].length === 4) {
-                    const date = new Date(parts[2], parts[1]-1, parts[0]);
-                    date.setDate(date.getDate() + 3);
-                    const dd = String(date.getDate()).padStart(2, '0');
-                    const mm = String(date.getMonth() + 1).padStart(2, '0');
-                    const yy = date.getFullYear();
-                    bbIn.value = `${dd}/${mm}/${yy}`;
-                }
+            function updateBB(baseDate) {
+                if (!baseDate) return;
+                const date = new Date(baseDate);
+                date.setDate(date.getDate() + 3);
+                bbIn.value = date.toISOString().split('T')[0];
                 updatePreview();
             }
 
-            updateBB();
+            updateBB(prodIn.value);
 
-            enforceDateFormat(prodIn, updateBB);
-            enforceDateFormat(bbIn, updatePreview);
+            function fmt(val) {
+                if (!val) return "00/00/0000";
+                const [y, m, d] = val.split('-');
+                return `${d}/${m}/${y}`;
+            }
 
             function scaleFont(text) {
                 const len = text.length;
@@ -463,12 +449,28 @@
 
             function updatePreview() {
                 liveFn.textContent = fnIn.value || "NAMA PRODUK";
-                liveP.textContent = prodIn.value || "00/00/0000";
-                liveBB.textContent = bbIn.value || "00/00/0000";
+                liveP.textContent = fmt(prodIn.value);
+                liveBB.textContent = fmt(bbIn.value);
                 scaleFont(liveFn.textContent);
             }
 
+            const labelForm = document.getElementById('labelForm');
+            const qtyIn = document.getElementById('qty');
+
+            labelForm.addEventListener('submit', (e) => {
+                const qty = parseInt(qtyIn.value);
+
+                if (qty > 200) {
+                    alert("Maaf, maksimal cetak sekali jalan adalah 200 label.");
+                    e.preventDefault();
+                    return;
+                }
+            });
+
             fnIn.addEventListener('change', updatePreview);
+            prodIn.addEventListener('change', (e) => updateBB(e.target.value));
+            bbIn.addEventListener('change', updatePreview);
+
             updatePreview();
         });
     </script>

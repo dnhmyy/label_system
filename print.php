@@ -15,11 +15,20 @@ $prod_date = $_POST['prod_date'] ?? '';
 $bb_date = $_POST['bb_date'] ?? '';
 $qty = (int)($_POST['qty'] ?? 1);
 
+// Security & Performance: Batasi jumlah cetak (max 500)
+if ($qty > 200) {
+    echo "Jumlah label terlalu banyak (maksimal 200), pastikan printer/server bisa handle.";
+    exit;
+}
+$qty = max(1, $qty);
+
 // Format tanggal agar lebih mudah dibaca
 // Input dari form sekarang adalah format DD/MM/YYYY (teks)
-function parseCustomDate($dateStr) {
-    if (empty($dateStr)) return '';
-    $dateObj = DateTime::createFromFormat('d/m/Y', $dateStr);
+function parseCustomDate($dateStr)
+{
+    if (empty($dateStr))
+        return '';
+    $dateObj = DateTime::createFromFormat('Y-m-d', $dateStr);
     return $dateObj ? $dateObj->format('d/m/Y') : $dateStr;
 }
 
@@ -31,7 +40,7 @@ $bb_date_formatted = parseCustomDate($bb_date);
 // Margin: 0 agar full content
 $mpdf = new Mpdf([
     'mode' => 'utf-8',
-    'format' => [40, 30], 
+    'format' => [40, 30],
     'margin_left' => 1,
     'margin_right' => 1,
     'margin_top' => 1,
@@ -50,7 +59,7 @@ $font_size_pt = 15; // Default
 if ($char_len > 12) {
     // Rumus scaling sederhana
     // Semakin panjang, semakin kecil
-    $scale_factor = 12 / $char_len; 
+    $scale_factor = 12 / $char_len;
     $font_size_pt = max(6, 15 * $scale_factor); // Min 6pt biar terbaca
 }
 
@@ -135,8 +144,8 @@ $label_body = "
     <!-- Row 3: Tanggal -->
     <tr>
         <td class='td-date'>
-            <div class='line'><strong>P:</strong> " . $prod_date_formatted . "</div>
-            <div class='line'><strong>BB:</strong> " . $bb_date_formatted . "</div>
+            <div class='line'><strong>P:</strong> " . htmlspecialchars($prod_date_formatted) . "</div>
+            <div class='line'><strong>BB:</strong> " . htmlspecialchars($bb_date_formatted) . "</div>
         </td>
     </tr>
 </table>
@@ -154,5 +163,4 @@ for ($i = 0; $i < $qty; $i++) {
 
 // 5. Output PDF (Inline di browser)
 $filename = 'label-' . date('YmdHis') . '.pdf';
-$mpdf->Output($filename, 'I'); 
-
+$mpdf->Output($filename, 'I');

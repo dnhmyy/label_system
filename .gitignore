@@ -1,3 +1,10 @@
 vendor/
 .DS_Store
 *.log
+*.bak
+.env
+.env.*
+.vscode/
+.idea/
+composer.phar
+/images/logo.png.bak

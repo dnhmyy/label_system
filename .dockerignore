@@ -1,6 +1,14 @@
 .git
 .gitignore
+.dockerignore
 vendor
 README.md
 Dockerfile
 docker-compose.yml
+.env
+.env.*
+*.log
+*.bak
+.vscode
+.idea
+convert_logo.php
