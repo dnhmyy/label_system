@@ -3,187 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roti Kebanggaan - Production System</title>
+    <title>Roti Kebanggaan - Production Label System</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-dark: #00271b;
-            --primary-light: #00321c;
-            --accent: #c2a35d; /* Gold-ish accent for a premium heritage feel */
-            --bg-page: #f9f7f2; /* Cream/Ivory paper background */
+            --primary: #00271b;
+            --primary-light: #003d2b;
+            --bg-body: #f8fafc;
             --bg-card: #ffffff;
-            --text-main: #1a1a1a;
-            --text-muted: #555555;
-            --border-color: #d1d1d1;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background-color: var(--bg-page);
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 2rem 1rem;
+            padding: 2rem;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        header h1 {
-            font-family: 'Crimson Pro', serif;
-            font-size: 2.8rem;
-            color: var(--primary-dark);
-            letter-spacing: 0.02em;
-            margin-bottom: 0.3rem;
-        }
-
-        header p {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .main-container {
+        .container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1040px;
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 3rem;
-            align-items: start;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            animation: slideUp 0.6s ease-out;
         }
 
-        /* Responsive stack for smaller screens */
-        @media (max-width: 850px) {
-            .main-container {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .form-card {
+        /* Form Card */
+        .card {
             background: var(--bg-card);
             padding: 2.5rem;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            border-radius: 4px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
         }
 
-        h2.section-title {
-            font-family: 'Crimson Pro', serif;
+        .header-section {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-img {
+            height: 54px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-info h1 {
             font-size: 1.5rem;
-            color: var(--primary-dark);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--primary-dark);
-            display: inline-block;
-            padding-bottom: 0.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.01em;
+        }
+
+        .brand-info p {
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .form-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: var(--primary-dark);
+            color: var(--text-main);
         }
 
         input, select {
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--border-color);
-            border-radius: 2px;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
             font-size: 1rem;
+            color: var(--text-main);
             transition: all 0.2s;
+            background: #fff;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--primary-dark);
-            background-color: #fff;
-            box-shadow: 0 0 0 2px rgba(0, 39, 27, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 39, 27, 0.08);
         }
 
         .btn-submit {
             width: 100%;
             padding: 1rem;
-            background-color: var(--primary-dark);
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 1.5rem;
-            transition: background-color 0.2s;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.8rem;
+            gap: 0.75rem;
+            margin-top: 1rem;
         }
 
         .btn-submit:hover {
-            background-color: var(--primary-light);
+            background: var(--primary-light);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(0, 39, 27, 0.15);
         }
 
-        /* Preview Section */
-        .preview-pane {
-            position: sticky;
-            top: 2rem;
+        /* Preview Area */
+        .preview-area {
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 1.5rem;
+            gap: 2rem;
+            background: rgba(255,255,255,0.4);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px dashed var(--border);
         }
 
-        .preview-header {
-            font-weight: 600;
-            color: var(--text-muted);
-            font-size: 0.8rem;
+        .privew-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(0, 39, 27, 0.05);
+            padding: 0.4rem 1rem;
+            border-radius: 99px;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            letter-spacing: 0.05em;
         }
 
-        .preview-header::before, .preview-header::after {
-            content: "";
-            width: 30px;
-            height: 1px;
-            background-color: var(--border-color);
-        }
-
-        /* Label Mockup Wrapper */
-        .physical-label-mockup {
-            width: 320px; /* Scaled from 40mm */
-            height: 240px; /* Scaled from 30mm */
-            background: #fff;
+        .label-mockup {
+            width: 320px;
+            height: 240px;
+            background: white;
             border: 1px solid #000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            position: relative;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            background-image: 
-                radial-gradient(#eee 1px, transparent 1px);
-            background-size: 20px 20px; /* Subtle grid to show scale */
+            position: relative;
         }
 
         .mockup-table {
@@ -196,60 +185,61 @@
             height: 50%;
             vertical-align: bottom;
             text-align: center;
-            padding-bottom: 5px;
+            padding-bottom: 8px;
         }
 
-        .td-dates {
-            height: 50%;
-            vertical-align: top;
-            text-align: center;
-            padding-top: 5px;
-        }
-
-        .product-name-preview {
+        .display-fn {
             font-family: 'Times New Roman', serif;
             font-weight: bold;
             text-transform: uppercase;
-            border-bottom: 2px solid #000;
+            border-bottom: 2.5px solid #000;
             display: inline-block;
             line-height: 1;
             padding-bottom: 2px;
         }
 
-        .date-line {
+        .td-dates {
+            height: 50%;
+            vertical-align: middle;
+            text-align: center;
             font-family: 'Times New Roman', serif;
-            font-size: 1.3rem;
-            line-height: 1.4;
+            font-size: 1.25rem;
+        }
+
+        .date-row {
+            line-height: 1.5;
+        }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; padding: 1rem; }
+            body { padding: 0.5rem; }
         }
 
         .footer {
-            margin-top: 5rem;
+            margin-top: 3rem;
+            grid-column: 1 / -1;
             text-align: center;
             font-size: 0.8rem;
             color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-            padding-top: 2rem;
-            width: 100%;
-            max-width: 1000px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Roti Kebanggaan</h1>
-        <p>Sistem Produksi Label v2.0</p>
-    </header>
+    <main class="container">
+        <section class="card">
+            <div class="header-section">
+                <img src="images/logo.png" alt="Logo" class="logo-img">
+                <div class="brand-info">
+                    <h1>Roti Kebanggaan</h1>
+                    <p>Production System</p>
+                </div>
+            </div>
 
-    <main class="main-container">
-        <!-- Form Section -->
-        <section class="form-card">
-            <h2 class="section-title">Konfigurasi Label</h2>
-            
             <form id="labelForm" action="print.php" method="POST" target="_blank">
                 <div class="form-group">
-                    <label for="fn">NAMA PRODUK</label>
-                    <input list="products" id="fn" name="fn" placeholder="Cari atau ketik nama produk..." required autocomplete="off">
+                    <label for="fn">Nama Produk</label>
+                    <input list="products" id="fn" name="fn" placeholder="Ketik nama produk..." required autocomplete="off">
                     <datalist id="products">
                         <option value="BR - REF PER 2KG">
                         <option value="BR - MALINDA PER 2KG">
@@ -316,18 +306,18 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div class="form-group">
-                        <label for="prod_date">TANGGAL PRODUKSI</label>
+                        <label for="prod_date">P (Produksi)</label>
                         <input type="date" id="prod_date" name="prod_date" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="bb_date">BEST BEFORE (BB)</label>
+                        <label for="bb_date">BB (Best Before)</label>
                         <input type="date" id="bb_date" name="bb_date" required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="qty">JUMLAH CETAK</label>
+                    <label for="qty">Jumlah Cetak</label>
                     <input type="number" id="qty" name="qty" min="1" value="1" required>
                 </div>
 
@@ -335,99 +325,91 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
-                    CETAK LABEL PDF
+                    Generate & Print PDF
                 </button>
             </form>
         </section>
 
-        <!-- Preview Section -->
-        <section class="preview-pane">
-            <div class="preview-header">Live Preview</div>
-            
-            <div class="physical-label-mockup" id="labelPreview">
+        <section class="preview-area">
+            <span class="privew-badge">Digital Mockup</span>
+            <div class="label-mockup">
                 <table class="mockup-table">
                     <tr>
                         <td class="td-product">
-                            <div class="product-name-preview" id="disp-fn">NAMA PRODUK</div>
+                            <div class="display-fn" id="live-fn">NAMA PRODUK</div>
                         </td>
                     </tr>
                     <tr>
                         <td class="td-dates">
-                            <div class="date-line"><strong>P:</strong> <span id="disp-p">DD/MM/YYYY</span></div>
-                            <div class="date-line"><strong>BB:</strong> <span id="disp-bb">DD/MM/YYYY</span></div>
+                            <div class="date-row"><strong>P:</strong> <span id="live-p">00/00/0000</span></div>
+                            <div class="date-row"><strong>BB:</strong> <span id="live-bb">00/00/0000</span></div>
                         </td>
                     </tr>
                 </table>
             </div>
-
-            <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; line-height: 1.5;">
-                Simulasi hasil cetak pada kertas label 40mm x 30mm.<br>
-                Pastikan data sudah benar sebelum mencetak.
-            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+                * Sesuai standar cetak 40x30mm<br>
+                Times New Roman font rendering
+            </p>
         </section>
-    </main>
 
-    <footer class="footer">
-        &copy; 2026 Roti Kebanggaan | Sistem Manajemen Produksi | DnnTech Professional
-    </footer>
+        <footer class="footer">
+            &copy; 2026 Roti Kebanggaan | DnnTech Professional Platform
+        </footer>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const productIn = document.getElementById('fn');
-            const prodDateIn = document.getElementById('prod_date');
-            const bbDateIn = document.getElementById('bb_date');
+            const prodIn = document.getElementById('prod_date');
+            const bbIn = document.getElementById('bb_date');
+            const fnIn = document.getElementById('fn');
 
-            const dispFn = document.getElementById('disp-fn');
-            const dispP = document.getElementById('disp-p');
-            const dispBB = document.getElementById('disp-bb');
+            const liveFn = document.getElementById('live-fn');
+            const liveP = document.getElementById('live-p');
+            const liveBB = document.getElementById('live-bb');
 
-            // 1. Initial State
+            // 1. Initial Dates
             const today = new Date();
-            const todayStr = today.toISOString().split('T')[0];
-            prodDateIn.value = todayStr;
+            prodIn.value = today.toISOString().split('T')[0];
 
-            // Auto calculate BB (+3 days)
-            const updateBB = (val) => {
-                const date = new Date(val);
+            function updateBB(baseDate) {
+                const date = new Date(baseDate);
                 date.setDate(date.getDate() + 3);
-                bbDateIn.value = date.toISOString().split('T')[0];
-                renderPreview();
+                bbIn.value = date.toISOString().split('T')[0];
+                updatePreview();
             }
 
-            updateBB(todayStr);
+            updateBB(prodIn.value);
 
-            // 2. Formatting Date (DD/MM/YYYY)
-            function formatDate(str) {
-                if(!str) return "DD/MM/YYYY";
-                const [y, m, d] = str.split('-');
+            // 2. Format
+            function fmt(val) {
+                if(!val) return "00/00/0000";
+                const [y, m, d] = val.split('-');
                 return `${d}/${m}/${y}`;
             }
 
-            // 3. Dynamic Font Refinement
-            function refineFontSize(text) {
+            // 3. Font Scale
+            function scaleFont(text) {
                 const len = text.length;
-                let size = 24; // Default preview px
-                if (len > 12) {
-                    size = Math.max(10, 24 * (12 / len));
-                }
-                dispFn.style.fontSize = size + 'px';
+                let size = 22; // Base px
+                if (len > 12) size = Math.max(10, 22 * (12 / len));
+                liveFn.style.fontSize = size + 'px';
             }
 
-            // 4. Main Render
-            function renderPreview() {
-                const name = productIn.value || "NAMA PRODUK";
-                dispFn.textContent = name;
-                dispP.textContent = formatDate(prodDateIn.value);
-                dispBB.textContent = formatDate(bbDateIn.value);
-                refineFontSize(name);
+            // 4. Update
+            function updatePreview() {
+                const name = fnIn.value || "NAMA PRODUK";
+                liveFn.textContent = name;
+                liveP.textContent = fmt(prodIn.value);
+                liveBB.textContent = fmt(bbIn.value);
+                scaleFont(name);
             }
 
-            // 5. Listeners
-            productIn.addEventListener('input', renderPreview);
-            prodDateIn.addEventListener('change', (e) => updateBB(e.target.value));
-            bbDateIn.addEventListener('change', renderPreview);
+            fnIn.addEventListener('input', updatePreview);
+            prodIn.addEventListener('change', (e) => updateBB(e.target.value));
+            bbIn.addEventListener('change', updatePreview);
 
-            renderPreview();
+            updatePreview();
         });
     </script>
 </body>
