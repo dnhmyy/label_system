@@ -15,15 +15,14 @@ $prod_date = $_POST['prod_date'] ?? '';
 $bb_date = $_POST['bb_date'] ?? '';
 $qty = (int)($_POST['qty'] ?? 1);
 
-// Security & Performance: Batasi jumlah cetak (max 500)
+// Security & Performance: Batasi jumlah cetak (max 200)
 if ($qty > 200) {
     echo "Jumlah label terlalu banyak (maksimal 200), pastikan printer/server bisa handle.";
     exit;
 }
 $qty = max(1, $qty);
 
-// Format tanggal agar lebih mudah dibaca
-// Input dari form sekarang adalah format DD/MM/YYYY (teks)
+// Input dari form sekarang adalah format DD/MM/YYYY
 function parseCustomDate($dateStr)
 {
     if (empty($dateStr))
@@ -52,8 +51,8 @@ $mpdf = new Mpdf([
 // Logic Font Size Otomatis
 // Base size 15pt. Jika text panjang, font mengecil.
 $full_text = "FN – " . $fn;
-$char_len = strlen($fn); // Hitung panjang nama produk saja atau full text
-$font_size_pt = 15; // Default
+$char_len = strlen($fn);
+$font_size_pt = 15;
 
 // Ambang batas karakter sebelum mengecil (kira-kira 15 char untuk 40mm)
 if ($char_len > 12) {
