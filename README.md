@@ -1,77 +1,107 @@
-# Sistem Label Produksi Dapur
+# Roti Kebanggaan - Production Label System
 
-Sistem web sederhana untuk mencetak label produk dapur (40mm x 30mm) menggunakan PHP 8 dan mPDF, dirancang untuk printer thermal Xprinter XP-D4601B.
+Sistem web internal sederhana dan efisien untuk mencetak label produk manufaktur/dapur (ukuran custom **40mm x 30mm**). 
+Dibangun dengan **PHP 8.2**, merender PDF secara dinamis menggunakan library **mPDF**, dan dirancang khusus agar kompatibel dengan printer thermal (misal: Xprinter XP-D4601B).
 
-## Fitur
-- **Auto PDF Generation:** Langsung membuat file PDF siap cetak.
-- **Custom Size:** Ukuran pas 40mm x 30mm tanpa margin error.
-- **Batch Print:** Bisa set jumlah label (Qty) dan otomatis menjadi halaman-halaman dalam satu PDF.
+## Fitur Utama
+- **Generasi PDF Instan:** Proses input dari form langsung menjadi file PDF yang siap cetak tanpa intermediate step yang rumit.
+- **Ukuran Kertas Presisi:** Menggunakan margin custom 0-1mm untuk menyesuaikan presisi batas kertas thermal 40x30mm.
+- **Batch Printing (Multi-page):** Pengguna bisa mencetak puluhan hingga ratusan label (kapasitas hingga 200 label per request) dalam satu klik (satu file PDF multi-halaman).
+- **Auto-Scale Typography:** Nama produk (SKU/Item) yang panjang akan secara otomatis mengecil agar tetap muat di batas kertas.
+- **Keamanan & Performa:**
+  - Telah melewati security hardening dasar (XSS guard via output sanitization `htmlspecialchars`).
+  - Maksimum *batch load* dibatasi (Max 200 halaman) untuk menghindari serangan resource exhaustion (DoS).
+  - Aset statis sudah dioptimasi mendalam secara kompresi (WebP logo).
 
-## Struktur Project
-```
-label-system/
-│
-├── index.php       # Form Input
-├── print.php       # Logic Generate PDF
-├── composer.json   # Dependency
-├── README.md       # Dokumentasi
-└── vendor/         # Library mPDF (hasil install composer)
-```
+---
 
-## Persyaratan
-- PHP 8.0 atau lebih baru.
-- Ekstensi PHP GD (`php-gd`) aktif.
-- Composer.
+## Instalasi & Cara Menjalankan
 
-## Cara Install
+Sistem ini bisa dijalankan menggunakan **Docker** (Sangat Direkomendasikan) atau menggunakan Local/Native PHP.
 
-1. **Clone/Download Project ini**.
-2. **Install Dependency** menggunakan Composer:
-   Buka terminal di folder project dan jalankan:
+### Opsi 1: Menggunakan Docker (Direkomendasikan)
+Metode ini adalah metode terbaik untuk Deployment Server Production atau testing lokal tanpa perlu setting PHP dan dependensi secara manual.
+
+**Prasyarat:** Terinstall Docker Engine dan Docker Compose.
+
+1. **Clone/Download Repository:**
+   ```bash
+   git clone https://github.com/dnhmyy/label_system.git
+   cd label_system
+   ```
+
+2. **Jalankan Aplikasi dengan Docker Compose:**
+   ```bash
+   docker-compose up -d --build
+   ```
+   *Perintah ini akan secara otomatis melakukan setup PHP 8.2 Apache, install kebutuhan module `gd`, mendownload `mPDF` lewat Composer multi-stage, lalu menjalankan server di background.*
+
+3. **Akses Web Aplikasi:**
+   Buka browser dan kunjungi:
+   **`http://localhost:8081`**
+
+4. **Monitoring Log (Optional):**
+   ```bash
+   docker-compose logs -f
+   ```
+
+5. **Stop Server Docker:**
+   ```bash
+   docker-compose down
+   ```
+
+---
+
+### Opsi 2: Menggunakan Local Native (Tanpa Docker)
+Cocok jika kamu sudah punya server XAMPP/Laragon, atau untuk development cepat (seperti yang saat ini dijalankan dengan built-in server `php -S`).
+
+**Prasyarat:** 
+- Visual Studio Code / Terminal
+- PHP >= 8.0 (Ekstensi `gd` aktif)
+- Composer
+
+1. **Install Dependensi Composer (mPDF):**
+   Buka repository ini di terminal, pastikan berada di folder project:
    ```bash
    composer install
    ```
-   Ini akan mengunduh library mPDF ke dalam folder `vendor/`.
+   *Ini akan membuat folder `vendor/` dan mendownload library mPDF.*
 
-## Cara Menjalankan (Localhost)
-
-Cara termudah adalah menggunakan PHP built-in server:
-
-1. Buka terminal di folder project.
-2. Jalankan perintah:
+2. **Jalankan PHP Built-in Server:**
    ```bash
-   php -S localhost:8000
+   php -S localhost:8081
    ```
-3. Buka browser dan akses:
-   `http://localhost:8000`
 
-## Cara Penggunaan
-1. Isi **Nama Produk** (contoh: FN - WASSANT SUSU).
-2. Isi **Tanggal Produksi** (otomatis hari ini).
-3. Isi **Tanggal Best Before**.
-4. Isi **Jumlah Cetak** (misal: 5).
-5. Klik **Generate & Print**.
-6. Tab baru akan terbuka berisi PDF.
-7. Tekan `Ctrl + P` (Print) di browser.
-   - **Destination:** Pilih Xprinter XP-D4601B Anda.
-   - **Paper Size:** Pastikan terdeteksi 40mm x 30mm (atau User Defined).
-   - **Margins:** None (Kososngkan/Minimum).
-   - **Scale:** Default / 100%.
-     
+3. **Akses Web Aplikasi:**
+   Buka browser dan ketik: **`http://localhost:8081`**
 
-## Deployment ke Server / Docker
+---
 
-### Nginx / Apache
-Upload semua file (termasuk folder `vendor` jika tidak bisa akses composer di server, atau jalankan `composer install` di server).
-Pastikan folder memiliki permission yang sesuai.
+## Panduan Penggunaan Print
+1. Akses web melalui browser.
+2. Di pojok kiri bawah, perhatikan form data.
+3. **Pilih Nama Produk:** Pilih item dari Dropdown sesuai Series Produksi (BR, CAKE, PX, IN, TPG, dll).
+4. **Isi Tanggal:**
+   - **P (Produksi):** Default hari ini (bisa diganti).
+   - **BB (Best Before):** Default +3 Hari dari tanggal produksi (bisa dikustom).
+5. **Set Jumlah Cetak:** Input berapa banyak label (max 200 per klik) untuk produk yang sama.
+6. **Generate & Print:**
+   - Klik tombol **Generate & Print PDF**. Format akan dikonfirmasi jika angka di atas 50.
+   - Tab baru browser PDF ter-render.
+7. **Proses Nge-Print Thermal (PENTING):**
+   - Di tab PDF, tekan **`Ctrl + P`**.
+   - **Printer:** Pilih Printer Thermal (Misal: XPrinter).
+   - **Paper Size / Kertas:** Pilih custom size 40x30mm (atau bikin preset baru di driver printer jika belum ada).
+   - **Margin:** Ubah ke `None` atau `Minimum`.
+   - **Scale:** Pilih `Default` / `100%`. (Pastikan format tidak "Fit to Printable Area" jika bikin ukuran PDF jadi mengecil berlebihan).
+   - Lalu Print.
 
-### Docker (Contoh Dockerfile Sederhana)
-```dockerfile
-FROM php:8.1-apache
-WORKDIR /var/www/html
-COPY . .
-RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev && docker-php-ext-install gd
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install --no-dev
-EXPOSE 80
-```
+---
+
+## Catatan Konfigurasi & Keamanan (Deploy)
+- **Repo Bersih:** `.gitignore` dan `.dockerignore` telah diatur agar environment, secret `.env`, logs, dan folder library IDE `.vscode`/`.idea` tidak ikut didorong baik ke Git maupun ke Image Server.
+- Folder `/vendor` dilarang untuk diunggah secara mentah ke Git repo, cukup andalkan instruksi build `composer install` lewat pipeline/Dockerfile.
+- **Batasan Skala:** Script `print.php` punya *hardcoded cap limit* 200 jumlah. Silahkan ubah value jika server kamu lebih powerful/dedicate.
+
+---
+*Dikembangkan oleh DnnTech - 2026*
