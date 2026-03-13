@@ -3,188 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roti Kebanggaan - Premium Label System</title>
+    <title>Roti Kebanggaan - Production System</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.3);
-            --primary: #7c2d12;
-            --primary-light: #9a3412;
-            --accent: #f97316;
-            --text-main: #431407;
-            --text-muted: #78716c;
-            --bg-gradient: linear-gradient(135deg, #fdf4ff 0%, #fff7ed 50%, #fff1f2 100%);
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            --primary-dark: #00271b;
+            --primary-light: #00321c;
+            --accent: #c2a35d; /* Gold-ish accent for a premium heritage feel */
+            --bg-page: #f9f7f2; /* Cream/Ivory paper background */
+            --bg-card: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #555555;
+            --border-color: #d1d1d1;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Outfit', sans-serif;
         }
 
         body {
-            background: var(--bg-gradient);
-            background-attachment: fixed;
+            background-color: var(--bg-page);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            padding: 2rem;
-            color: var(--text-main);
+            padding: 2rem 1rem;
         }
 
-        /* Decorative Background elements */
-        .blob {
-            position: fixed;
-            z-index: -1;
-            filter: blur(80px);
-            opacity: 0.4;
-            border-radius: 50%;
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
         }
-        .blob-1 { width: 400px; height: 400px; background: #fb923c; top: -100px; right: -100px; }
-        .blob-2 { width: 300px; height: 300px; background: #f472b6; bottom: -50px; left: -50px; }
 
-        .main-wrapper {
+        header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.8rem;
+            color: var(--primary-dark);
+            letter-spacing: 0.02em;
+            margin-bottom: 0.3rem;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .main-container {
             width: 100%;
             max-width: 1000px;
             display: grid;
             grid-template-columns: 1.2fr 1fr;
-            gap: 2rem;
-            animation: fadeIn 0.8s ease-out;
+            gap: 3rem;
+            align-items: start;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Responsive stack for smaller screens */
+        @media (max-width: 850px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
         }
 
-        /* Glass Container */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            box-shadow: var(--shadow);
+        .form-card {
+            background: var(--bg-card);
             padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border-radius: 4px;
         }
 
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin-bottom: 2.5rem;
+        h2.section-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary-dark);
+            display: inline-block;
+            padding-bottom: 0.3rem;
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         label {
             display: block;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            margin-bottom: 0.6rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
         }
 
         input, select {
             width: 100%;
-            padding: 0.85rem 1.2rem;
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(124, 45, 18, 0.1);
-            border-radius: 12px;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 2px;
             font-size: 1rem;
-            color: var(--text-main);
-            transition: all 0.3s ease;
+            transition: all 0.2s;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--accent);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+            border-color: var(--primary-dark);
+            background-color: #fff;
+            box-shadow: 0 0 0 2px rgba(0, 39, 27, 0.1);
         }
 
-        .btn-print {
+        .btn-submit {
             width: 100%;
-            padding: 1.1rem;
-            background: var(--primary);
+            padding: 1rem;
+            background-color: var(--primary-dark);
             color: white;
             border: none;
-            border-radius: 14px;
-            font-size: 1.1rem;
+            border-radius: 4px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-top: 1rem;
+            margin-top: 1.5rem;
+            transition: background-color 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.8rem;
         }
 
-        .btn-print:hover {
-            background: var(--primary-light);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -10px var(--primary);
+        .btn-submit:hover {
+            background-color: var(--primary-light);
         }
 
-        /* Preview Sidebar */
-        .preview-section {
+        /* Preview Section */
+        .preview-pane {
+            position: sticky;
+            top: 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             gap: 1.5rem;
         }
 
-        .preview-label-tag {
+        .preview-header {
+            font-weight: 600;
+            color: var(--text-muted);
             font-size: 0.8rem;
-            font-weight: 700;
-            background: var(--accent);
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 100px;
             text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        /* The Visual Mockup */
-        .label-mockup {
+        .preview-header::before, .preview-header::after {
+            content: "";
+            width: 30px;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+
+        /* Label Mockup Wrapper */
+        .physical-label-mockup {
             width: 320px; /* Scaled from 40mm */
             height: 240px; /* Scaled from 30mm */
-            background: white;
-            border: 2px dashed #d6d3d1;
-            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
-            border-radius: 4px;
+            background: #fff;
+            border: 1px solid #000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             position: relative;
             display: flex;
             flex-direction: column;
-            padding: 0;
             overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .label-mockup::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.02);
+            background-image: 
+                radial-gradient(#eee 1px, transparent 1px);
+            background-size: 20px 20px; /* Subtle grid to show scale */
         }
 
         .mockup-table {
@@ -193,65 +192,64 @@
             border-collapse: collapse;
         }
 
-        .mockup-product-cell {
+        .td-product {
             height: 50%;
             vertical-align: bottom;
             text-align: center;
-            padding-bottom: 2mm;
+            padding-bottom: 5px;
         }
 
-        .mockup-product-name {
+        .td-dates {
+            height: 50%;
+            vertical-align: top;
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        .product-name-preview {
             font-family: 'Times New Roman', serif;
             font-weight: bold;
             text-transform: uppercase;
             border-bottom: 2px solid #000;
             display: inline-block;
+            line-height: 1;
             padding-bottom: 2px;
-            line-height: 1.1;
         }
 
-        .mockup-date-cell {
-            height: 50%;
-            vertical-align: middle;
-            text-align: center;
+        .date-line {
             font-family: 'Times New Roman', serif;
-            font-size: 1.2rem;
-        }
-
-        .mockup-date-line {
+            font-size: 1.3rem;
             line-height: 1.4;
         }
 
-        @media (max-width: 900px) {
-            .main-wrapper {
-                grid-template-columns: 1fr;
-            }
-            body { padding: 1rem; }
-        }
-
         .footer {
-            margin-top: 3rem;
+            margin-top: 5rem;
             text-align: center;
             font-size: 0.8rem;
             color: var(--text-muted);
-            grid-column: 1 / -1;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            width: 100%;
+            max-width: 1000px;
         }
     </style>
 </head>
 <body>
 
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
+    <header>
+        <h1>Roti Kebanggaan</h1>
+        <p>Sistem Produksi Label v2.0</p>
+    </header>
 
-    <main class="main-wrapper">
-        <div class="glass-card">
-            <h1>Roti Kebanggaan</h1>
-            <p class="subtitle">Premium Manufacturing Label System</p>
-
+    <main class="main-container">
+        <!-- Form Section -->
+        <section class="form-card">
+            <h2 class="section-title">Konfigurasi Label</h2>
+            
             <form id="labelForm" action="print.php" method="POST" target="_blank">
                 <div class="form-group">
-                    <label for="fn">Nama Produk</label>
-                    <input list="products" id="fn" name="fn" placeholder="Ketik atau pilih produk..." required autocomplete="off">
+                    <label for="fn">NAMA PRODUK</label>
+                    <input list="products" id="fn" name="fn" placeholder="Cari atau ketik nama produk..." required autocomplete="off">
                     <datalist id="products">
                         <option value="BR - REF PER 2KG">
                         <option value="BR - MALINDA PER 2KG">
@@ -318,120 +316,118 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div class="form-group">
-                        <label for="prod_date">Tgl Produksi (P)</label>
+                        <label for="prod_date">TANGGAL PRODUKSI</label>
                         <input type="date" id="prod_date" name="prod_date" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="bb_date">Tgl Best Before (BB)</label>
+                        <label for="bb_date">BEST BEFORE (BB)</label>
                         <input type="date" id="bb_date" name="bb_date" required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="qty">Jumlah Cetak (Qty)</label>
+                    <label for="qty">JUMLAH CETAK</label>
                     <input type="number" id="qty" name="qty" min="1" value="1" required>
                 </div>
 
-                <button type="submit" class="btn-print">
+                <button type="submit" class="btn-submit">
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
-                    Generate & Print PDF
+                    CETAK LABEL PDF
                 </button>
             </form>
-        </div>
+        </section>
 
-        <div class="preview-section">
-            <span class="preview-label-tag">Live Preview</span>
-            <div class="label-mockup" id="previewContainer">
+        <!-- Preview Section -->
+        <section class="preview-pane">
+            <div class="preview-header">Live Preview</div>
+            
+            <div class="physical-label-mockup" id="labelPreview">
                 <table class="mockup-table">
                     <tr>
-                        <td class="mockup-product-cell">
-                            <div class="mockup-product-name" id="preview-fn">NAMA PRODUK</div>
+                        <td class="td-product">
+                            <div class="product-name-preview" id="disp-fn">NAMA PRODUK</div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="mockup-date-cell">
-                            <div class="mockup-date-line"><strong>P:</strong> <span id="preview-p">DD/MM/YYYY</span></div>
-                            <div class="mockup-date-line"><strong>BB:</strong> <span id="preview-bb">DD/MM/YYYY</span></div>
+                        <td class="td-dates">
+                            <div class="date-line"><strong>P:</strong> <span id="disp-p">DD/MM/YYYY</span></div>
+                            <div class="date-line"><strong>BB:</strong> <span id="disp-bb">DD/MM/YYYY</span></div>
                         </td>
                     </tr>
                 </table>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">
-                * Tampilan di atas adalah simulasi hasil cetak mPDF.<br/>
-                Ukuran asli label: 40mm x 30mm.
-            </p>
-        </div>
 
-        <div class="footer">
-            © 2026 Roti Kebanggaan | Premium Edition by DnnTech
-        </div>
+            <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; line-height: 1.5;">
+                Simulasi hasil cetak pada kertas label 40mm x 30mm.<br>
+                Pastikan data sudah benar sebelum mencetak.
+            </div>
+        </section>
     </main>
+
+    <footer class="footer">
+        &copy; 2026 Roti Kebanggaan | Sistem Manajemen Produksi | DnnTech Professional
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('labelForm');
-            const productInput = document.getElementById('fn');
-            const prodDateInput = document.getElementById('prod_date');
-            const bbDateInput = document.getElementById('bb_date');
+            const productIn = document.getElementById('fn');
+            const prodDateIn = document.getElementById('prod_date');
+            const bbDateIn = document.getElementById('bb_date');
 
-            // Preview Elements
-            const previewFn = document.getElementById('preview-fn');
-            const previewP = document.getElementById('preview-p');
-            const previewBB = document.getElementById('preview-bb');
+            const dispFn = document.getElementById('disp-fn');
+            const dispP = document.getElementById('disp-p');
+            const dispBB = document.getElementById('disp-bb');
 
-            // 1. Initial Dates
+            // 1. Initial State
             const today = new Date();
             const todayStr = today.toISOString().split('T')[0];
-            prodDateInput.value = todayStr;
+            prodDateIn.value = todayStr;
 
-            // Smart BB Date Logic (+3 Days by default)
-            const setSmartBB = (baseDateStr) => {
-                const date = new Date(baseDateStr);
+            // Auto calculate BB (+3 days)
+            const updateBB = (val) => {
+                const date = new Date(val);
                 date.setDate(date.getDate() + 3);
-                bbDateInput.value = date.toISOString().split('T')[0];
-                updatePreview();
-            };
+                bbDateIn.value = date.toISOString().split('T')[0];
+                renderPreview();
+            }
 
-            setSmartBB(todayStr);
+            updateBB(todayStr);
 
-            // 2. Format Date for Preview (DD/MM/YYYY)
-            const formatDate = (dateStr) => {
-                if (!dateStr) return 'DD/MM/YYYY';
-                const [y, m, d] = dateStr.split('-');
+            // 2. Formatting Date (DD/MM/YYYY)
+            function formatDate(str) {
+                if(!str) return "DD/MM/YYYY";
+                const [y, m, d] = str.split('-');
                 return `${d}/${m}/${y}`;
-            };
+            }
 
-            // 3. Dynamic Font Size Calculation for Preview
-            const updateFontSize = (text) => {
+            // 3. Dynamic Font Refinement
+            function refineFontSize(text) {
                 const len = text.length;
-                let size = 22; // Base preview size in px
+                let size = 24; // Default preview px
                 if (len > 12) {
-                    size = Math.max(10, 22 * (12 / len));
+                    size = Math.max(10, 24 * (12 / len));
                 }
-                previewFn.style.fontSize = size + 'px';
-            };
+                dispFn.style.fontSize = size + 'px';
+            }
 
-            // 4. Update Preview Function
-            const updatePreview = () => {
-                const val = productInput.value || 'NAMA PRODUK';
-                previewFn.textContent = val;
-                previewP.textContent = formatDate(prodDateInput.value);
-                previewBB.textContent = formatDate(bbDateInput.value);
-                updateFontSize(val);
-            };
+            // 4. Main Render
+            function renderPreview() {
+                const name = productIn.value || "NAMA PRODUK";
+                dispFn.textContent = name;
+                dispP.textContent = formatDate(prodDateIn.value);
+                dispBB.textContent = formatDate(bbDateIn.value);
+                refineFontSize(name);
+            }
 
-            // 5. Event Listeners
-            productInput.addEventListener('input', updatePreview);
-            prodDateInput.addEventListener('change', (e) => {
-                setSmartBB(e.target.value);
-            });
-            bbDateInput.addEventListener('change', updatePreview);
+            // 5. Listeners
+            productIn.addEventListener('input', renderPreview);
+            prodDateIn.addEventListener('change', (e) => updateBB(e.target.value));
+            bbDateIn.addEventListener('change', renderPreview);
 
-            // Initial Update
-            updatePreview();
+            renderPreview();
         });
     </script>
 </body>
