@@ -16,9 +16,15 @@ $bb_date = $_POST['bb_date'] ?? '';
 $qty = (int)($_POST['qty'] ?? 1);
 
 // Format tanggal agar lebih mudah dibaca
-// Input dari <input type="date"> adalah YYYY-MM-DD
-$prod_date_formatted = !empty($prod_date) ? date('d/m/Y', strtotime($prod_date)) : '';
-$bb_date_formatted = !empty($bb_date) ? date('d/m/Y', strtotime($bb_date)) : '';
+// Input dari form sekarang adalah format DD/MM/YYYY (teks)
+function parseCustomDate($dateStr) {
+    if (empty($dateStr)) return '';
+    $dateObj = DateTime::createFromFormat('d/m/Y', $dateStr);
+    return $dateObj ? $dateObj->format('d/m/Y') : $dateStr;
+}
+
+$prod_date_formatted = parseCustomDate($prod_date);
+$bb_date_formatted = parseCustomDate($bb_date);
 
 // 2. Setup mPDF
 // Ukuran kertas custom: 40mm x 30mm

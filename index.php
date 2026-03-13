@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roti Kebanggaan - Production Label System</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #00271b;
@@ -31,9 +33,13 @@
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
+            /* Changed to column to allow footer at bottom */
             justify-content: center;
             align-items: center;
             padding: 2rem;
+            position: relative;
+            /* For absolutely positioned footer if needed, or just for structure */
         }
 
         .container {
@@ -43,11 +49,20 @@
             grid-template-columns: 1fr 1fr;
             gap: 2.5rem;
             animation: slideUp 0.6s ease-out;
+            margin-bottom: 4rem;
+            /* Add space for footer */
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Form Card */
@@ -89,17 +104,27 @@
 
         .form-group {
             margin-bottom: 1.5rem;
+            position: relative; /* For custom dropdown positioning */
         }
 
-        label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        /* Custom Searchable Select - Reverted to Solid Standard */
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
             color: var(--text-main);
+            transition: all 0.2s;
+            background: #fff;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.25rem;
         }
 
-        input, select {
+        input {
             width: 100%;
             padding: 0.75rem 1rem;
             border: 1.5px solid var(--border);
@@ -110,7 +135,7 @@
             background: #fff;
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(0, 39, 27, 0.08);
@@ -147,9 +172,9 @@
             justify-content: center;
             align-items: center;
             gap: 2rem;
-            background: rgba(255,255,255,0.4);
+            background: rgba(255, 255, 255, 0.4);
             border-radius: 24px;
-            padding: 2rem;
+            padding: 2.5rem;
             border: 1px dashed var(--border);
         }
 
@@ -168,7 +193,7 @@
             width: 320px;
             height: 240px;
             background: white;
-            border: 1px solid #000;
+            border: 2px solid #000;
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
             display: flex;
             flex-direction: column;
@@ -182,48 +207,56 @@
         }
 
         .td-product {
-            height: 50%;
+            height: 45%; /* Reduced height to move product up */
             vertical-align: bottom;
             text-align: center;
-            padding-bottom: 8px;
+            padding-bottom: 2px;
         }
 
         .display-fn {
             font-family: 'Times New Roman', serif;
             font-weight: bold;
             text-transform: uppercase;
-            border-bottom: 2.5px solid #000;
+            border-bottom: 3.5px solid #000;
             display: inline-block;
-            line-height: 1;
-            padding-bottom: 2px;
+            line-height: 0.9;
+            padding-bottom: 4px;
+            font-size: 28px;
         }
 
         .td-dates {
-            height: 50%;
+            height: 55%;
             vertical-align: middle;
             text-align: center;
             font-family: 'Times New Roman', serif;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
         }
 
         .date-row {
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         @media (max-width: 900px) {
-            .container { grid-template-columns: 1fr; padding: 1rem; }
-            body { padding: 0.5rem; }
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            body {
+                padding: 0.5rem;
+            }
         }
 
         .footer {
-            margin-top: 3rem;
-            grid-column: 1 / -1;
+            margin-top: 2rem;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
+            opacity: 0.5;
         }
     </style>
 </head>
+
 <body>
 
     <main class="container">
@@ -232,87 +265,101 @@
                 <img src="images/logo.png" alt="Logo" class="logo-img">
                 <div class="brand-info">
                     <h1>Roti Kebanggaan</h1>
-                    <p>Production System</p>
+                    <p>Production Label System</p>
                 </div>
             </div>
 
             <form id="labelForm" action="print.php" method="POST" target="_blank">
                 <div class="form-group">
                     <label for="fn">Nama Produk</label>
-                    <input list="products" id="fn" name="fn" placeholder="Ketik nama produk..." required autocomplete="off">
-                    <datalist id="products">
-                        <option value="BR - REF PER 2KG">
-                        <option value="BR - MALINDA PER 2KG">
-                        <option value="LAPIS SURABAYA">
-                        <option value="LAPIS LEGIT">
-                        <option value="BOLU PISANG">
-                        <option value="PX - TA">
-                        <option value="PX - TB">
-                        <option value="PX - TG">
-                        <option value="PX - PA">
-                        <option value="PX - WC">
-                        <option value="PX - WS">
-                        <option value="PX - SL">
-                        <option value="PX - PN">
-                        <option value="PX - CC">
-                        <option value="PX - MS">
-                        <option value="S - TA">
-                        <option value="S - TB">
-                        <option value="S - TG">
-                        <option value="S - PA">
-                        <option value="S - MS">
-                        <option value="FN - WC">
-                        <option value="FN - WS">
-                        <option value="FN - RISOL MAYO">
-                        <option value="FN - MAKARONI">
-                        <option value="IN - BK">
-                        <option value="IN - BS">
-                        <option value="IN - CB">
-                        <option value="IN - CC">
-                        <option value="IN - CJ">
-                        <option value="IN - CJM">
-                        <option value="IN - CN">
-                        <option value="IN - JM">
-                        <option value="IN - KA">
-                        <option value="IN - KB">
-                        <option value="IN - KCM">
-                        <option value="IN - KCM PA">
-                        <option value="IN - KM">
-                        <option value="IN - KT">
-                        <option value="IN - SL">
-                        <option value="IN - SN">
-                        <option value="IN - SS">
-                        <option value="IN - WC">
-                        <option value="IN - WS">
-                        <option value="IN - BA">
-                        <option value="IN - BG">
-                        <option value="IN - CE">
-                        <option value="IN - DG">
-                        <option value="IN - KI">
-                        <option value="IN - MA">
-                        <option value="IN - MP">
-                        <option value="IN - SB">
-                        <option value="IN - CKK">
-                        <option value="IN - TR">
-                        <option value="IN - CF">
-                        <option value="IN - CCB">
-                        <option value="TPG - BK">
-                        <option value="TPG - SL">
-                        <option value="TPG - KT">
-                        <option value="TPG - SAM">
-                        <option value="TPG - SN">
-                    </datalist>
+                    <select id="fn" name="fn" required>
+                        <option value="" disabled selected>Pilih Produk...</option>
+                        <optgroup label="BR Series">
+                            <option value="BR - REF PER 2KG">BR - REF PER 2KG</option>
+                            <option value="BR - MALINDA PER 2KG">BR - MALINDA PER 2KG</option>
+                        </optgroup>
+                        <optgroup label="CAKE Series">
+                            <option value="LAPIS SURABAYA">LAPIS SURABAYA</option>
+                            <option value="LAPIS LEGIT">LAPIS LEGIT</option>
+                            <option value="BOLU PISANG">BOLU PISANG</option>
+                        </optgroup>
+                        <optgroup label="PX Series">
+                            <option value="PX - TA">PX - TA</option>
+                            <option value="PX - TB">PX - TB</option>
+                            <option value="PX - TG">PX - TG</option>
+                            <option value="PX - PA">PX - PA</option>
+                            <option value="PX - WC">PX - WC</option>
+                            <option value="PX - WS">PX - WS</option>
+                            <option value="PX - SL">PX - SL</option>
+                            <option value="PX - PN">PX - PN</option>
+                            <option value="PX - CC">PX - CC</option>
+                            <option value="PX - MS">PX - MS</option>
+                        </optgroup>
+                        <optgroup label="S Series">
+                            <option value="S - TA">S - TA</option>
+                            <option value="S - TB">S - TB</option>
+                            <option value="S - TG">S - TG</option>
+                            <option value="S - PA">S - PA</option>
+                            <option value="S - MS">S - MS</option>
+                        </optgroup>
+                        <optgroup label="FN Series">
+                            <option value="FN - WC">FN - WC</option>
+                            <option value="FN - WS">FN - WS</option>
+                            <option value="FN - RISOL MAYO">FN - RISOL MAYO</option>
+                            <option value="FN - MAKARONI">FN - MAKARONI</option>
+                        </optgroup>
+                        <optgroup label="IN Series">
+                            <option value="IN - BK">IN - BK</option>
+                            <option value="IN - BS">IN - BS</option>
+                            <option value="IN - CB">IN - CB</option>
+                            <option value="IN - CC">IN - CC</option>
+                            <option value="IN - CJ">IN - CJ</option>
+                            <option value="IN - CJM">IN - CJM</option>
+                            <option value="IN - CN">IN - CN</option>
+                            <option value="IN - JM">IN - JM</option>
+                            <option value="IN - KA">IN - KA</option>
+                            <option value="IN - KB">IN - KB</option>
+                            <option value="IN - KCM">IN - KCM</option>
+                            <option value="IN - KCM PA">IN - KCM PA</option>
+                            <option value="IN - KM">IN - KM</option>
+                            <option value="IN - KT">IN - KT</option>
+                            <option value="IN - SL">IN - SL</option>
+                            <option value="IN - SN">IN - SN</option>
+                            <option value="IN - SS">IN - SS</option>
+                            <option value="IN - WC">IN - WC</option>
+                            <option value="IN - WS">IN - WS</option>
+                            <option value="IN - BA">IN - BA</option>
+                            <option value="IN - BG">IN - BG</option>
+                            <option value="IN - CE">IN - CE</option>
+                            <option value="IN - DG">IN - DG</option>
+                            <option value="IN - KI">IN - KI</option>
+                            <option value="IN - MA">IN - MA</option>
+                            <option value="IN - MP">IN - MP</option>
+                            <option value="IN - SB">IN - SB</option>
+                            <option value="IN - CKK">IN - CKK</option>
+                            <option value="IN - TR">IN - TR</option>
+                            <option value="IN - CF">IN - CF</option>
+                            <option value="IN - CCB">IN - CCB</option>
+                        </optgroup>
+                        <optgroup label="TPG Series">
+                            <option value="TPG - BK">TPG - BK</option>
+                            <option value="TPG - SL">TPG - SL</option>
+                            <option value="TPG - KT">TPG - KT</option>
+                            <option value="TPG - SAM">TPG - SAM</option>
+                            <option value="TPG - SN">TPG - SN</option>
+                        </optgroup>
+                    </select>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div class="form-group">
-                        <label for="prod_date">P (Produksi)</label>
-                        <input type="date" id="prod_date" name="prod_date" required>
+                        <label for="prod_date">P (Produksi) <small style="color:var(--text-muted)">DD/MM/YYYY</small></label>
+                        <input type="text" id="prod_date" name="prod_date" placeholder="DD/MM/YYYY" required maxlength="10">
                     </div>
 
                     <div class="form-group">
-                        <label for="bb_date">BB (Best Before)</label>
-                        <input type="date" id="bb_date" name="bb_date" required>
+                        <label for="bb_date">BB (Best Before) <small style="color:var(--text-muted)">DD/MM/YYYY</small></label>
+                        <input type="text" id="bb_date" name="bb_date" placeholder="DD/MM/YYYY" required maxlength="10">
                     </div>
                 </div>
 
@@ -323,10 +370,16 @@
 
                 <button type="submit" class="btn-submit">
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                        </path>
                     </svg>
                     Generate & Print PDF
                 </button>
+
+                <footer class="footer">
+                    &copy; 2026 Roti Kebanggaan | DnnTech
+                </footer>
             </form>
         </section>
 
@@ -349,13 +402,9 @@
             </div>
             <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
                 * Sesuai standar cetak 40x30mm<br>
-                Times New Roman font rendering
+                Render: Times New Roman Bold
             </p>
         </section>
-
-        <footer class="footer">
-            &copy; 2026 Roti Kebanggaan | DnnTech Professional Platform
-        </footer>
     </main>
 
     <script>
@@ -368,49 +417,61 @@
             const liveP = document.getElementById('live-p');
             const liveBB = document.getElementById('live-bb');
 
-            // 1. Initial Dates
-            const today = new Date();
-            prodIn.value = today.toISOString().split('T')[0];
+            // --- Auto Format DD/MM/YYYY ---
+            function enforceDateFormat(input, onValid) {
+                input.addEventListener('input', (e) => {
+                    let val = e.target.value.replace(/\D/g, '');
+                    if (val.length > 2) val = val.slice(0, 2) + '/' + val.slice(2);
+                    if (val.length > 5) val = val.slice(0, 5) + '/' + val.slice(5, 9);
+                    e.target.value = val;
+                    if(val.length === 10) onValid();
+                    updatePreview();
+                });
+            }
 
-            function updateBB(baseDate) {
-                const date = new Date(baseDate);
-                date.setDate(date.getDate() + 3);
-                bbIn.value = date.toISOString().split('T')[0];
+            // --- Initial Dates ---
+            const today = new Date();
+            const d = String(today.getDate()).padStart(2, '0');
+            const m = String(today.getMonth() + 1).padStart(2, '0');
+            const y = today.getFullYear();
+            prodIn.value = `${d}/${m}/${y}`;
+
+            function updateBB() {
+                const parts = prodIn.value.split('/');
+                if(parts.length === 3 && parts[2].length === 4) {
+                    const date = new Date(parts[2], parts[1]-1, parts[0]);
+                    date.setDate(date.getDate() + 3);
+                    const dd = String(date.getDate()).padStart(2, '0');
+                    const mm = String(date.getMonth() + 1).padStart(2, '0');
+                    const yy = date.getFullYear();
+                    bbIn.value = `${dd}/${mm}/${yy}`;
+                }
                 updatePreview();
             }
 
-            updateBB(prodIn.value);
+            updateBB();
 
-            // 2. Format
-            function fmt(val) {
-                if(!val) return "00/00/0000";
-                const [y, m, d] = val.split('-');
-                return `${d}/${m}/${y}`;
-            }
+            enforceDateFormat(prodIn, updateBB);
+            enforceDateFormat(bbIn, updatePreview);
 
-            // 3. Font Scale
             function scaleFont(text) {
                 const len = text.length;
-                let size = 22; // Base px
-                if (len > 12) size = Math.max(10, 22 * (12 / len));
+                let size = 28;
+                if (len > 12) size = Math.max(14, 28 * (12 / len));
                 liveFn.style.fontSize = size + 'px';
             }
 
-            // 4. Update
             function updatePreview() {
-                const name = fnIn.value || "NAMA PRODUK";
-                liveFn.textContent = name;
-                liveP.textContent = fmt(prodIn.value);
-                liveBB.textContent = fmt(bbIn.value);
-                scaleFont(name);
+                liveFn.textContent = fnIn.value || "NAMA PRODUK";
+                liveP.textContent = prodIn.value || "00/00/0000";
+                liveBB.textContent = bbIn.value || "00/00/0000";
+                scaleFont(liveFn.textContent);
             }
 
-            fnIn.addEventListener('input', updatePreview);
-            prodIn.addEventListener('change', (e) => updateBB(e.target.value));
-            bbIn.addEventListener('change', updatePreview);
-
+            fnIn.addEventListener('change', updatePreview);
             updatePreview();
         });
     </script>
 </body>
+
 </html>
