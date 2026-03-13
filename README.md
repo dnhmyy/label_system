@@ -78,6 +78,9 @@ Cocok jika kamu sudah punya server XAMPP/Laragon, atau untuk development cepat (
 ---
 
 ## Panduan Penggunaan Print
+
+![Tampilan Antarmuka Web Label System](images/web.png)
+
 1. Akses web melalui browser.
 2. Di pojok kiri bawah, perhatikan form data.
 3. **Pilih Nama Produk:** Pilih item dari Dropdown sesuai Series Produksi (BR, CAKE, PX, IN, TPG, dll).
