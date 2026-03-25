@@ -101,10 +101,4 @@ Cocok jika kamu sudah punya server XAMPP/Laragon, atau untuk development cepat (
 
 ---
 
-## Catatan Konfigurasi & Keamanan (Deploy)
-- **Repo Bersih:** `.gitignore` dan `.dockerignore` telah diatur agar environment, secret `.env`, logs, dan folder library IDE `.vscode`/`.idea` tidak ikut didorong baik ke Git maupun ke Image Server.
-- Folder `/vendor` dilarang untuk diunggah secara mentah ke Git repo, cukup andalkan instruksi build `composer install` lewat pipeline/Dockerfile.
-- **Batasan Skala:** Script `print.php` punya *hardcoded cap limit* 200 jumlah. Silahkan ubah value jika server kamu lebih powerful/dedicate.
-
----
 *Dikembangkan oleh DnnTech - 2026*
