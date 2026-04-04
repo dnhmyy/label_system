@@ -277,6 +277,8 @@
                     <label for="fn">Nama Produk</label>
                     <select id="fn" name="fn" required>
                         <option value="" disabled selected>Pilih Produk...</option>
+                        <optgroup label="LABEL Series">
+                            <option value="LABEL - ISIAN">LABEL - ISIAN</option>
                         <optgroup label="BR Series">
                             <option value="BR - REF PER 2KG">BR - REF PER 2KG</option>
                             <option value="BR - MALINDA PER 2KG">BR - MALINDA PER 2KG</option>
