@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $fn = $_POST['fn'] ?? '';
 $prod_date = $_POST['prod_date'] ?? '';
 $bb_date = $_POST['bb_date'] ?? '';
-$qty = (int)($_POST['qty'] ?? 1);
+$qty = (int) ($_POST['qty'] ?? 1);
 
 // Security & Performance: Batasi jumlah cetak (max 200)
 if ($qty > 200) {
@@ -36,130 +36,133 @@ $bb_date_formatted = parseCustomDate($bb_date);
 
 // 2. Setup mPDF
 // Ukuran kertas custom: 40mm x 30mm
-// Margin: 0 agar full content
 $mpdf = new Mpdf([
     'mode' => 'utf-8',
     'format' => [40, 30],
-    'margin_left' => 1,
-    'margin_right' => 1,
+    'margin_left' => 2.5,
+    'margin_right' => 1.5,
     'margin_top' => 1,
-    'margin_bottom' => 1,
+    'margin_bottom' => 0.5,
     'default_font_size' => 10,
     'default_font' => 'Arial'
 ]);
 
 // Logic Font Size Otomatis
-// Base size 15pt. Jika text panjang, font mengecil.
-$full_text = "FN – " . $fn;
+// Base size 14pt. Jika text panjang, font mengecil.
 $char_len = strlen($fn);
-$font_size_pt = 15;
+$font_size_pt = 14;
 
-// Ambang batas karakter sebelum mengecil (kira-kira 15 char untuk 40mm)
 if ($char_len > 12) {
-    // Rumus scaling sederhana
-    // Semakin panjang, semakin kecil
     $scale_factor = 12 / $char_len;
-    $font_size_pt = max(6, 15 * $scale_factor); // Min 6pt biar terbaca
+    $font_size_pt = max(6, 14 * $scale_factor); // Min 6pt biar terbaca
 }
 
-// 3. Template HTML Label
-// Styling CSS inline untuk memastikan layout pas di ukuran kecil
-$html_content = "
+// Sanitasi input sekali saja
+$safe_fn = htmlspecialchars($fn);
+$safe_prod = htmlspecialchars($prod_date_formatted);
+$safe_bb = htmlspecialchars($bb_date_formatted);
+
+// Barcode value: tanggal produksi format YYYYMMDD (compact, scannable)
+$barcode_value = str_replace('-', '', $prod_date); // "2026-04-16" -> "20260416"
+
+// 3. Template HTML Label - satu blok utuh per halaman
+// Layout: Rata kiri, tabel 3 baris dengan tinggi fixed
+// agar konten terdistribusi rata tengah secara vertikal
+$full_label_html = "
 <style>
     @page {
         margin: 0;
+        size: 40mm 30mm;
     }
     body {
         font-family: 'Times New Roman', serif;
         margin: 0;
         padding: 0;
-        text-align: center;
     }
-    /* Layout Baru dengan Tabel Baris */
-    .layout-table {
+    .label-table {
         width: 100%;
-        height: 28mm; /* Tentukan tinggi tetap mendekati ukuran kertas (30mm) */
+        height: 20mm;
         border-collapse: collapse;
         table-layout: fixed;
     }
-    .layout-table td {
-        text-align: center;
-        vertical-align: middle;
-        padding: 0;
+    .label-table td {
+        text-align: left;
+        padding-left: 1.5mm;
+        padding-right: 0;
     }
-    
-    /* Baris 1: Produk */
+    /* Baris 1: Nama Produk - 8mm */
     .td-product {
-        height: 12mm; /* Tinggi ditambah agar bisa menampung <br> */
-        vertical-align: bottom;
-        padding-bottom: 1mm;
+        height: 8mm;
+        vertical-align: middle;
     }
-    
-    /* Baris 2: Sudah dihapus, diganti border pada .product-name */
-
-    /* Baris 3: Tanggal */
-    .td-date {
-        height: 14mm; /* Tinggi tetap untuk area tanggal */
-        vertical-align: middle; 
-        padding-top: 2mm;
-    }
-
     .product-name {
         font-weight: bold;
-        font-size: {$font_size_pt}pt; 
-        line-height: 1;
+        font-size: {$font_size_pt}pt;
+        line-height: 1.1;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        display: inline-block; /* Agar lebar sesuai teks saja */
-        border-bottom: 2px solid #000; /* Garis pas di bawah tulisan */
-        padding-bottom: 1mm; /* Jarak teks ke garis */
-        margin-bottom: 2mm; /* Jarak garis ke bawah */
-        white-space: nowrap; 
+        letter-spacing: 0.3px;
+        border-bottom: 1.5px solid #000;
+        padding-bottom: 0.8mm;
+        white-space: nowrap;
+    }
+    /* Baris 2: Tanggal P & BB - 12mm */
+    .td-dates {
+        height: 12mm;
+        vertical-align: middle;
     }
     .line {
-        font-size: 11pt;
+        font-size: 9.5pt;
         white-space: nowrap;
         line-height: 1.4;
-        margin-bottom: 1px;
     }
     .line strong {
         font-weight: bold;
-        margin-right: 2px;
+    }
+    .barcode-wrap {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+        padding-left: 1.5mm;
+        padding-top: 1.5mm;
     }
 </style>
-";
-
-// Body content - Gunakan row TR terpisah agar 'forced' spacing-nya jalan
-$label_body = "
-<table class='layout-table'>
-    <!-- Row 1: Produk -->
+<table class='label-table'>
     <tr>
         <td class='td-product'>
-            <div class='product-name'>" . htmlspecialchars($fn) . "</div>
-            <br/> <!-- Menambah jarak sesuai permintaan -->
+            <div class='product-name'>{$safe_fn}</div>
         </td>
     </tr>
-
-    <!-- Row 3: Tanggal -->
     <tr>
-        <td class='td-date'>
-            <div class='line'><strong>P:</strong> " . htmlspecialchars($prod_date_formatted) . "</div>
-            <div class='line'><strong>BB:</strong> " . htmlspecialchars($bb_date_formatted) . "</div>
+        <td class='td-dates'>
+            <div class='line'><strong>P:</strong> {$safe_prod}</div>
+            <div class='line'><strong>BB:</strong> {$safe_bb}</div>
         </td>
+        
     </tr>
 </table>
+<div class='barcode-wrap'>
+    <barcode
+        code='{$barcode_value}'
+        type='C128B'
+        height='0.5'
+        size='0.55'
+        quiet_zone_left='0'
+        quiet_zone_right='0'
+        style='margin: 0; padding: 0;'
+    />
+</div>
 ";
 
-// 4. Output Styles & Loop create label pages
-$mpdf->WriteHTML($html_content); // Write CSS once
+// 4. Render halaman pertama
+$mpdf->WriteHTML($full_label_html);
 
-for ($i = 0; $i < $qty; $i++) {
-    if ($i > 0) {
-        $mpdf->AddPage();
-    }
-    $mpdf->WriteHTML($label_body);
+// 5. Loop halaman ke-2 dst: AddPage() lalu tulis ulang HTML lengkap
+for ($i = 1; $i < $qty; $i++) {
+    $mpdf->AddPage();
+    $mpdf->WriteHTML($full_label_html);
 }
 
-// 5. Output PDF (Inline di browser)
+// 6. Output PDF (Inline di browser)
 $filename = 'label-' . date('YmdHis') . '.pdf';
 $mpdf->Output($filename, 'I');

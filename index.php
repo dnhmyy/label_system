@@ -197,46 +197,55 @@
             background: white;
             border: 2px solid #000;
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-rows: 32% 37% 31%;
+            padding: 10px 16px 10px 28px;
             position: relative;
-        }
-
-        .mockup-table {
-            width: 100%;
-            height: 100%;
-            border-collapse: collapse;
-        }
-
-        .td-product {
-            height: 45%;
-            /* Reduced height to move product up */
-            vertical-align: bottom;
-            text-align: center;
-            padding-bottom: 2px;
         }
 
         .display-fn {
             font-family: 'Times New Roman', serif;
             font-weight: bold;
             text-transform: uppercase;
-            border-bottom: 3.5px solid #000;
-            display: inline-block;
-            line-height: 0.9;
-            padding-bottom: 4px;
+            border-bottom: 3px solid #000;
+            line-height: 1.1;
+            padding-bottom: 5px;
             font-size: 28px;
+            text-align: left;
+            align-self: center;
+            white-space: normal;
+            word-break: break-word;
+            letter-spacing: 0.01em;
         }
 
-        .td-dates {
-            height: 55%;
-            vertical-align: middle;
-            text-align: center;
+        .mockup-dates {
+            text-align: left;
             font-family: 'Times New Roman', serif;
-            font-size: 1.35rem;
+            font-size: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .date-row {
             line-height: 1.4;
+        }
+
+        .mockup-barcode {
+            display: flex;
+            align-items: center;
+            gap: 1.5px;
+            height: 100%;
+            justify-content: flex-start;
+            width: 100%;
+            overflow: hidden;
+            align-self: center;
+            padding-top: 2px;
+        }
+
+        .mockup-barcode .bar {
+            background: #000;
+            height: 70%;
         }
 
         @media (max-width: 900px) {
@@ -389,23 +398,16 @@
         <section class="preview-area">
             <span class="privew-badge">Digital Mockup</span>
             <div class="label-mockup">
-                <table class="mockup-table">
-                    <tr>
-                        <td class="td-product" style="height: 35%;">
-                            <div class="display-fn" id="live-fn" style="font-size: 28px;">NAMA PRODUK</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="td-dates" style="height: 65%;">
-                            <div class="date-row"><strong>P:</strong> <span id="live-p">00/00/0000</span></div>
-                            <div class="date-row"><strong>BB:</strong> <span id="live-bb">00/00/0000</span></div>
-                        </td>
-                    </tr>
-                </table>
+                <div class="display-fn" id="live-fn">NAMA PRODUK</div>
+                <div class="mockup-dates">
+                    <div class="date-row"><strong>P:</strong> <span id="live-p">00/00/0000</span></div>
+                    <div class="date-row"><strong>BB:</strong> <span id="live-bb">00/00/0000</span></div>
+                </div>
+                <div class="mockup-barcode" id="live-barcode"></div>
             </div>
             <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
                 * Sesuai standar cetak 40x30mm<br>
-                Render: Times New Roman Bold
+                Barcode: Code 128 (Tanggal Produksi)
             </p>
         </section>
     </main>
@@ -419,6 +421,7 @@
             const liveFn = document.getElementById('live-fn');
             const liveP = document.getElementById('live-p');
             const liveBB = document.getElementById('live-bb');
+            const liveBarcode = document.getElementById('live-barcode');
 
             // --- Initial Dates ---
             const today = new Date();
@@ -443,8 +446,53 @@
             function scaleFont(text) {
                 const len = text.length;
                 let size = 28;
-                if (len > 12) size = Math.max(14, 28 * (12 / len));
+                let lineHeight = 1.1;
+                if (len > 14) size = 24;
+                if (len > 18) {
+                    size = 20;
+                    lineHeight = 1.0;
+                }
+                if (len > 24) {
+                    size = 17;
+                    lineHeight = 0.95;
+                }
                 liveFn.style.fontSize = size + 'px';
+                liveFn.style.lineHeight = lineHeight;
+            }
+
+            // Barcode preview: generate pseudo-barcode bars from date string
+            function renderBarcode(dateVal) {
+                liveBarcode.innerHTML = '';
+                const code = dateVal ? dateVal.replace(/-/g, '') : '00000000';
+                // Simple visual barcode: create bars based on digit values
+                const bars = [];
+                // Start quiet zone
+                bars.push({ w: 2, black: true });
+                bars.push({ w: 1, black: false });
+                bars.push({ w: 2, black: true });
+                bars.push({ w: 1, black: false });
+                for (let i = 0; i < code.length; i++) {
+                    const d = parseInt(code[i]);
+                    // Each digit -> alternating black/white bars
+                    bars.push({ w: Math.max(1, (d % 3) + 1), black: true });
+                    bars.push({ w: Math.max(1, ((d + 1) % 2) + 1), black: false });
+                    bars.push({ w: Math.max(1, ((d + 2) % 3) + 1), black: true });
+                    bars.push({ w: 1, black: false });
+                }
+                // End bars
+                bars.push({ w: 2, black: true });
+                bars.push({ w: 1, black: false });
+                bars.push({ w: 2, black: true });
+
+                bars.forEach(b => {
+                    const el = document.createElement('div');
+                    el.className = 'bar';
+                    el.style.width = b.w + 'px';
+                    if (!b.black) {
+                        el.style.background = 'transparent';
+                    }
+                    liveBarcode.appendChild(el);
+                });
             }
 
             function updatePreview() {
@@ -452,6 +500,7 @@
                 liveP.textContent = fmt(prodIn.value);
                 liveBB.textContent = fmt(bbIn.value);
                 scaleFont(liveFn.textContent);
+                renderBarcode(prodIn.value);
             }
 
             const labelForm = document.getElementById('labelForm');
