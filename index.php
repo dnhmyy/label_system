@@ -1,3 +1,8 @@
+<?php
+require_once __DIR__ . '/security.php';
+$security = bootstrapPageSecurity();
+$nonce = $security['nonce'];
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -9,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <style>
+    <style nonce="<?= $nonce ?>">
         :root {
             --primary: #00271b;
             --primary-light: #003d2b;
@@ -239,6 +244,7 @@
         .mockup-barcode .bar {
             background: #000;
             height: 70%;
+            flex-shrink: 0;
         }
 
         @media (max-width: 900px) {
@@ -275,6 +281,7 @@
             </div>
 
             <form id="labelForm" action="print.php" method="POST" target="_blank">
+                <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
                 <div class="form-group">
                     <label for="fn">Nama Produk</label>
                     <select id="fn" name="fn" required>
@@ -405,7 +412,7 @@
         </section>
     </main>
 
-    <script>
+    <script nonce="<?= $nonce ?>">
         document.addEventListener('DOMContentLoaded', () => {
             const prodIn = document.getElementById('prod_date');
             const bbIn = document.getElementById('bb_date');
@@ -449,6 +456,10 @@
                     size = 17;
                     lineHeight = 0.95;
                 }
+                if (len > 30) {
+                    size = 14;
+                    lineHeight = 0.9;
+                }
                 liveFn.style.fontSize = size + 'px';
                 liveFn.style.lineHeight = lineHeight;
             }
@@ -457,8 +468,19 @@
                 return (value || '').trim().replace(/\s+/g, ' ').toUpperCase();
             }
 
+            function getInitials(text) {
+                if (!text) return "";
+                return text.split(/[\s-]+/)
+                           .filter(word => word.length > 0)
+                           .map(word => word[0])
+                           .join('')
+                           .toUpperCase();
+            }
+
             function buildBarcodeValue() {
-                return `FN:${normalizeBarcodePart(fnIn.value)}|P:${normalizeBarcodePart(prodIn.value)}|BB:${normalizeBarcodePart(bbIn.value)}`;
+                const initials = getInitials(fnIn.value);
+                const datePart = prodIn.value.replace(/-/g, '').substring(2); // YYYYMMDD -> YYMMDD
+                return initials ? `${initials}-${datePart}` : datePart;
             }
 
             // keep the preview deterministic for the current payload

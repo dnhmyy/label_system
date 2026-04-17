@@ -1,26 +1,22 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/security.php';
 
 use Mpdf\Mpdf;
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: index.php');
-    exit;
-}
+// bootstrap security settings
+bootstrapPageSecurity(false);
 
-// request payload
-$fn = $_POST['fn'] ?? '';
-$prod_date = $_POST['prod_date'] ?? '';
-$bb_date = $_POST['bb_date'] ?? '';
-$qty = (int) ($_POST['qty'] ?? 1);
+// enforce POST and check CSRF
+enforceMethod('POST');
+verifyCsrfToken($_POST['csrf_token'] ?? null);
 
-// keep batch size bounded
-if ($qty > 200) {
-    echo "Jumlah label terlalu banyak (maksimal 200), pastikan printer/server bisa handle.";
-    exit;
-}
-$qty = max(1, $qty);
+// sanitize & validate inputs
+$fn = sanitizeProductName($_POST['fn'] ?? '');
+$prod_date = validateIsoDate($_POST['prod_date'] ?? '', 'Tanggal Produksi');
+$bb_date = validateIsoDate($_POST['bb_date'] ?? '', 'Tanggal Best Before');
+$qty = validateQty($_POST['qty'] ?? 1);
 
 function parseCustomDate($dateStr)
 {
@@ -66,14 +62,23 @@ $safe_fn = htmlspecialchars($fn);
 $safe_prod = htmlspecialchars($prod_date_formatted);
 $safe_bb = htmlspecialchars($bb_date_formatted);
 
+function get_initials($text) {
+    if (empty($text)) return "";
+    $words = preg_split('/[\s-]+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+    $initials = "";
+    foreach ($words as $w) {
+        $initials .= strtoupper($w[0]);
+    }
+    return $initials;
+}
+
 // keep barcode content stable across preview and pdf
-$barcode_value = sprintf(
-    'FN:%s|P:%s|BB:%s',
-    normalizeBarcodePart($fn),
-    normalizeBarcodePart($prod_date),
-    normalizeBarcodePart($bb_date)
-);
+$initials = get_initials($fn);
+$date_part = substr(str_replace('-', '', $prod_date), 2); // YYMMDD
+$barcode_value = $initials ? "{$initials}-{$date_part}" : $date_part;
 $safe_barcode_value = htmlspecialchars($barcode_value, ENT_QUOTES);
+
+$barcode_size = 0.55;
 
 $full_label_html = "
 <style>
@@ -153,7 +158,7 @@ $full_label_html = "
         code='{$safe_barcode_value}'
         type='C128B'
         height='0.5'
-        size='0.55'
+        size='{$barcode_size}'
         quiet_zone_left='0'
         quiet_zone_right='0'
         style='margin: 0; padding: 0;'

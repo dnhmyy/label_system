@@ -1,0 +1,12 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule "(^|/)\.(?!well-known/)" - [F,L]
+    RewriteRule ^vendor/ - [F,L,NC]
+    RewriteRule ^docker/ - [F,L,NC]
+</IfModule>
+
+<FilesMatch "^(\.env.*|composer\.(json|lock)|Dockerfile|docker-compose\.yml|README\.md|security\.php|.*\.(bak|log))$">
+    Require all denied
+</FilesMatch>

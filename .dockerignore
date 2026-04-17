@@ -9,6 +9,14 @@ docker-compose.yml
 .env.*
 *.log
 *.bak
+*.tmp
+*.swp
 .vscode
 .idea
 convert_logo.php
+coverage
+tmp
+cache
+storage
+build
+dist
