@@ -31,6 +31,13 @@ function parseCustomDate($dateStr)
     return $dateObj ? $dateObj->format('d/m/Y') : $dateStr;
 }
 
+function normalizeBarcodePart($value)
+{
+    $value = trim($value);
+    $value = preg_replace('/\s+/', ' ', $value);
+    return strtoupper($value);
+}
+
 $prod_date_formatted = parseCustomDate($prod_date);
 $bb_date_formatted = parseCustomDate($bb_date);
 
@@ -62,8 +69,14 @@ $safe_fn = htmlspecialchars($fn);
 $safe_prod = htmlspecialchars($prod_date_formatted);
 $safe_bb = htmlspecialchars($bb_date_formatted);
 
-// Barcode value: tanggal produksi format YYYYMMDD (compact, scannable)
-$barcode_value = str_replace('-', '', $prod_date); // "2026-04-16" -> "20260416"
+// Barcode value: kombinasi nama produk + tanggal produksi + tanggal BB
+$barcode_value = sprintf(
+    'FN:%s|P:%s|BB:%s',
+    normalizeBarcodePart($fn),
+    normalizeBarcodePart($prod_date),
+    normalizeBarcodePart($bb_date)
+);
+$safe_barcode_value = htmlspecialchars($barcode_value, ENT_QUOTES);
 
 // 3. Template HTML Label - satu blok utuh per halaman
 // Layout: Rata kiri, tabel 3 baris dengan tinggi fixed
@@ -143,7 +156,7 @@ $full_label_html = "
 </table>
 <div class='barcode-wrap'>
     <barcode
-        code='{$barcode_value}'
+        code='{$safe_barcode_value}'
         type='C128B'
         height='0.5'
         size='0.55'

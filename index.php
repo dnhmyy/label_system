@@ -460,23 +460,30 @@
                 liveFn.style.lineHeight = lineHeight;
             }
 
-            // Barcode preview: generate pseudo-barcode bars from date string
-            function renderBarcode(dateVal) {
+            function normalizeBarcodePart(value) {
+                return (value || '').trim().replace(/\s+/g, ' ').toUpperCase();
+            }
+
+            function buildBarcodeValue() {
+                return `FN:${normalizeBarcodePart(fnIn.value)}|P:${normalizeBarcodePart(prodIn.value)}|BB:${normalizeBarcodePart(bbIn.value)}`;
+            }
+
+            // Barcode preview: generate pseudo-barcode bars from combined content
+            function renderBarcode(code) {
                 liveBarcode.innerHTML = '';
-                const code = dateVal ? dateVal.replace(/-/g, '') : '00000000';
-                // Simple visual barcode: create bars based on digit values
+                const value = code || 'FN:|P:|BB:';
                 const bars = [];
                 // Start quiet zone
                 bars.push({ w: 2, black: true });
                 bars.push({ w: 1, black: false });
                 bars.push({ w: 2, black: true });
                 bars.push({ w: 1, black: false });
-                for (let i = 0; i < code.length; i++) {
-                    const d = parseInt(code[i]);
-                    // Each digit -> alternating black/white bars
-                    bars.push({ w: Math.max(1, (d % 3) + 1), black: true });
-                    bars.push({ w: Math.max(1, ((d + 1) % 2) + 1), black: false });
-                    bars.push({ w: Math.max(1, ((d + 2) % 3) + 1), black: true });
+                for (let i = 0; i < value.length; i++) {
+                    const charCode = value.charCodeAt(i);
+                    // Generate deterministic preview bars from each character code
+                    bars.push({ w: (charCode % 3) + 1, black: true });
+                    bars.push({ w: ((charCode >> 1) % 2) + 1, black: false });
+                    bars.push({ w: ((charCode >> 2) % 3) + 1, black: true });
                     bars.push({ w: 1, black: false });
                 }
                 // End bars
@@ -500,7 +507,7 @@
                 liveP.textContent = fmt(prodIn.value);
                 liveBB.textContent = fmt(bbIn.value);
                 scaleFont(liveFn.textContent);
-                renderBarcode(prodIn.value);
+                renderBarcode(buildBarcodeValue());
             }
 
             const labelForm = document.getElementById('labelForm');
