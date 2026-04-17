@@ -9,20 +9,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// 1. Ambil data dari form
+// request payload
 $fn = $_POST['fn'] ?? '';
 $prod_date = $_POST['prod_date'] ?? '';
 $bb_date = $_POST['bb_date'] ?? '';
 $qty = (int) ($_POST['qty'] ?? 1);
 
-// Security & Performance: Batasi jumlah cetak (max 200)
+// keep batch size bounded
 if ($qty > 200) {
     echo "Jumlah label terlalu banyak (maksimal 200), pastikan printer/server bisa handle.";
     exit;
 }
 $qty = max(1, $qty);
 
-// Input dari form sekarang adalah format DD/MM/YYYY
 function parseCustomDate($dateStr)
 {
     if (empty($dateStr))
@@ -41,8 +40,7 @@ function normalizeBarcodePart($value)
 $prod_date_formatted = parseCustomDate($prod_date);
 $bb_date_formatted = parseCustomDate($bb_date);
 
-// 2. Setup mPDF
-// Ukuran kertas custom: 40mm x 30mm
+// label page setup
 $mpdf = new Mpdf([
     'mode' => 'utf-8',
     'format' => [40, 30],
@@ -54,22 +52,21 @@ $mpdf = new Mpdf([
     'default_font' => 'Arial'
 ]);
 
-// Logic Font Size Otomatis
-// Base size 14pt. Jika text panjang, font mengecil.
+// shrink long product names to fit the label
 $char_len = strlen($fn);
 $font_size_pt = 14;
 
 if ($char_len > 12) {
     $scale_factor = 12 / $char_len;
-    $font_size_pt = max(6, 14 * $scale_factor); // Min 6pt biar terbaca
+    $font_size_pt = max(6, 14 * $scale_factor);
 }
 
-// Sanitasi input sekali saja
+// escape display values once
 $safe_fn = htmlspecialchars($fn);
 $safe_prod = htmlspecialchars($prod_date_formatted);
 $safe_bb = htmlspecialchars($bb_date_formatted);
 
-// Barcode value: kombinasi nama produk + tanggal produksi + tanggal BB
+// keep barcode content stable across preview and pdf
 $barcode_value = sprintf(
     'FN:%s|P:%s|BB:%s',
     normalizeBarcodePart($fn),
@@ -78,9 +75,6 @@ $barcode_value = sprintf(
 );
 $safe_barcode_value = htmlspecialchars($barcode_value, ENT_QUOTES);
 
-// 3. Template HTML Label - satu blok utuh per halaman
-// Layout: Rata kiri, tabel 3 baris dengan tinggi fixed
-// agar konten terdistribusi rata tengah secara vertikal
 $full_label_html = "
 <style>
     @page {
@@ -103,7 +97,7 @@ $full_label_html = "
         padding-left: 1.5mm;
         padding-right: 0;
     }
-    /* Baris 1: Nama Produk - 8mm */
+    /* product line */
     .td-product {
         height: 8mm;
         vertical-align: middle;
@@ -118,7 +112,7 @@ $full_label_html = "
         padding-bottom: 0.8mm;
         white-space: nowrap;
     }
-    /* Baris 2: Tanggal P & BB - 12mm */
+    /* date block */
     .td-dates {
         height: 12mm;
         vertical-align: middle;
@@ -167,15 +161,13 @@ $full_label_html = "
 </div>
 ";
 
-// 4. Render halaman pertama
 $mpdf->WriteHTML($full_label_html);
 
-// 5. Loop halaman ke-2 dst: AddPage() lalu tulis ulang HTML lengkap
+// duplicate the label for the remaining pages
 for ($i = 1; $i < $qty; $i++) {
     $mpdf->AddPage();
     $mpdf->WriteHTML($full_label_html);
 }
 
-// 6. Output PDF (Inline di browser)
 $filename = 'label-' . date('YmdHis') . '.pdf';
 $mpdf->Output($filename, 'I');

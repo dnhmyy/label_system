@@ -34,12 +34,10 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            /* Changed to column to allow footer at bottom */
             justify-content: center;
             align-items: center;
             padding: 2rem;
             position: relative;
-            /* For absolutely positioned footer if needed, or just for structure */
         }
 
         .container {
@@ -50,7 +48,6 @@
             gap: 2.5rem;
             animation: slideUp 0.6s ease-out;
             margin-bottom: 4rem;
-            /* Add space for footer */
         }
 
         @keyframes slideUp {
@@ -65,7 +62,6 @@
             }
         }
 
-        /* Form Card */
         .card {
             background: var(--bg-card);
             padding: 2.5rem;
@@ -105,10 +101,8 @@
         .form-group {
             margin-bottom: 1.5rem;
             position: relative;
-            /* For custom dropdown positioning */
         }
 
-        /* Custom Searchable Select - Reverted to Solid Standard */
         select {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -167,7 +161,6 @@
             box-shadow: 0 10px 15px -3px rgba(0, 39, 27, 0.15);
         }
 
-        /* Preview Area */
         .preview-area {
             display: flex;
             flex-direction: column;
@@ -407,7 +400,7 @@
             </div>
             <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
                 * Sesuai standar cetak 40x30mm<br>
-                Barcode: Code 128 (Tanggal Produksi)
+                Barcode: Code 128 (Nama Produk + P + BB)
             </p>
         </section>
     </main>
@@ -423,7 +416,7 @@
             const liveBB = document.getElementById('live-bb');
             const liveBarcode = document.getElementById('live-barcode');
 
-            // --- Initial Dates ---
+            // seed production date with today
             const today = new Date();
             prodIn.value = today.toISOString().split('T')[0];
 
@@ -468,25 +461,23 @@
                 return `FN:${normalizeBarcodePart(fnIn.value)}|P:${normalizeBarcodePart(prodIn.value)}|BB:${normalizeBarcodePart(bbIn.value)}`;
             }
 
-            // Barcode preview: generate pseudo-barcode bars from combined content
+            // keep the preview deterministic for the current payload
             function renderBarcode(code) {
                 liveBarcode.innerHTML = '';
                 const value = code || 'FN:|P:|BB:';
                 const bars = [];
-                // Start quiet zone
+                // quiet zone
                 bars.push({ w: 2, black: true });
                 bars.push({ w: 1, black: false });
                 bars.push({ w: 2, black: true });
                 bars.push({ w: 1, black: false });
                 for (let i = 0; i < value.length; i++) {
                     const charCode = value.charCodeAt(i);
-                    // Generate deterministic preview bars from each character code
                     bars.push({ w: (charCode % 3) + 1, black: true });
                     bars.push({ w: ((charCode >> 1) % 2) + 1, black: false });
                     bars.push({ w: ((charCode >> 2) % 3) + 1, black: true });
                     bars.push({ w: 1, black: false });
                 }
-                // End bars
                 bars.push({ w: 2, black: true });
                 bars.push({ w: 1, black: false });
                 bars.push({ w: 2, black: true });
