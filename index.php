@@ -265,6 +265,22 @@ $nonce = $security['nonce'];
             color: var(--text-muted);
             opacity: 0.5;
         }
+
+        .date-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .mockup-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .btn-icon {
+            flex-shrink: 0;
+        }
     </style>
 </head>
 
@@ -363,7 +379,7 @@ $nonce = $security['nonce'];
                     </select>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div class="date-grid">
                     <div class="form-group">
                         <label for="prod_date">P (Produksi)</label>
                         <input type="date" id="prod_date" name="prod_date" required>
@@ -381,7 +397,7 @@ $nonce = $security['nonce'];
                 </div>
 
                 <button type="submit" class="btn-submit">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="btn-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
                         </path>
@@ -405,7 +421,7 @@ $nonce = $security['nonce'];
                 </div>
                 <div class="mockup-barcode" id="live-barcode"></div>
             </div>
-            <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+            <p class="mockup-info">
                 * Sesuai standar cetak 40x30mm<br>
                 Barcode: Code 128 (Nama Produk + P + BB)
             </p>
