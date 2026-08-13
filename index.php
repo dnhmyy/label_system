@@ -375,6 +375,8 @@ $nonce = $security['nonce'];
                             <option value="TPG - KT">TPG - KT</option>
                             <option value="TPG - SAM">TPG - SAM</option>
                             <option value="TPG - SN">TPG - SN</option>
+                            <option value="TPG - Abon Ayam Manis">TPG - Abon Ayam Manis</option>
+                            <option value="TPG - Abon Ayam Pedas">TPG - Abon Ayam Pedas</option>
                         </optgroup>
                     </select>
                 </div>
