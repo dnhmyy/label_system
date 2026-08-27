@@ -302,6 +302,7 @@ $nonce = $security['nonce'];
                     <label for="fn">Nama Produk</label>
                     <select id="fn" name="fn" required>
                         <option value="" disabled selected>Pilih Produk...</option>
+                        <option value="CUSTOM">CUSTOM (Ketik Sendiri)</option>
                         <optgroup label="BR Series">
                             <option value="BR - REF PER 2KG">BR - REF PER 2KG</option>
                             <option value="BR - MALINDA PER 2KG">BR - MALINDA PER 2KG</option>
@@ -381,6 +382,11 @@ $nonce = $security['nonce'];
                     </select>
                 </div>
 
+                <div class="form-group" id="custom-fn-group" style="display: none;">
+                    <label for="custom_fn">Nama Produk Custom</label>
+                    <input type="text" id="custom_fn" placeholder="Masukkan nama produk custom..." maxlength="80" autocomplete="off" pattern="^[a-zA-Z0-9\s\-\.,&\/\(\)\+]+$" title="Hanya huruf, angka, spasi, dan karakter - . , & / ( ) + yang diizinkan">
+                </div>
+
                 <div class="date-grid">
                     <div class="form-group">
                         <label for="prod_date">P (Produksi)</label>
@@ -435,6 +441,8 @@ $nonce = $security['nonce'];
             const prodIn = document.getElementById('prod_date');
             const bbIn = document.getElementById('bb_date');
             const fnIn = document.getElementById('fn');
+            const customFnGroup = document.getElementById('custom-fn-group');
+            const customFnInput = document.getElementById('custom_fn');
 
             const liveFn = document.getElementById('live-fn');
             const liveP = document.getElementById('live-p');
@@ -496,7 +504,11 @@ $nonce = $security['nonce'];
             }
 
             function buildBarcodeValue() {
-                const initials = getInitials(fnIn.value);
+                let productName = fnIn.value;
+                if (productName === 'CUSTOM') {
+                    productName = customFnInput.value;
+                }
+                const initials = getInitials(productName);
                 const datePart = prodIn.value.replace(/-/g, '').substring(2); // YYYYMMDD -> YYMMDD
                 return initials ? `${initials}-${datePart}` : datePart;
             }
@@ -534,7 +546,11 @@ $nonce = $security['nonce'];
             }
 
             function updatePreview() {
-                liveFn.textContent = fnIn.value || "NAMA PRODUK";
+                let productName = fnIn.value;
+                if (productName === 'CUSTOM') {
+                    productName = customFnInput.value;
+                }
+                liveFn.textContent = productName || "NAMA PRODUK";
                 liveP.textContent = fmt(prodIn.value);
                 liveBB.textContent = fmt(bbIn.value);
                 scaleFont(liveFn.textContent);
@@ -554,10 +570,30 @@ $nonce = $security['nonce'];
                 }
             });
 
-            fnIn.addEventListener('change', updatePreview);
+            function toggleCustomInput() {
+                if (fnIn.value === 'CUSTOM') {
+                    customFnGroup.style.display = 'block';
+                    customFnInput.required = true;
+                    customFnInput.name = 'fn';
+                    fnIn.removeAttribute('name');
+                } else {
+                    customFnGroup.style.display = 'none';
+                    customFnInput.required = false;
+                    customFnInput.removeAttribute('name');
+                    fnIn.name = 'fn';
+                }
+            }
+
+            fnIn.addEventListener('change', () => {
+                toggleCustomInput();
+                updatePreview();
+            });
+            customFnInput.addEventListener('input', updatePreview);
             prodIn.addEventListener('change', (e) => updateBB(e.target.value));
             bbIn.addEventListener('change', updatePreview);
 
+            // Init state
+            toggleCustomInput();
             updatePreview();
         });
     </script>
